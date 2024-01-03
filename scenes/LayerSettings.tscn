@@ -1,0 +1,74 @@
+[gd_scene load_steps=9 format=3 uid="uid://w6usyfw2uimt"]
+
+[ext_resource type="Script" path="res://ui/layer_settings.gd" id="1_tm0e2"]
+[ext_resource type="Shader" path="res://ui/highlighter.gdshader" id="2_fa4lr"]
+[ext_resource type="Texture2D" uid="uid://bm62wvf0bnyqb" path="res://icons/onion_disabled.svg" id="3_j3hi6"]
+[ext_resource type="Texture2D" uid="uid://dg2naadl83m8m" path="res://icons/onion_active.svg" id="4_h21x7"]
+[ext_resource type="Script" path="res://ui/toggle_button.gd" id="5_3p68x"]
+[ext_resource type="Texture2D" uid="uid://3nb4c68eiu8d" path="res://icons/folder-solid.svg" id="6_a0pi7"]
+[ext_resource type="Script" path="res://ui/directory_button.gd" id="7_fypca"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kv4xd"]
+shader = ExtResource("2_fa4lr")
+shader_parameter/additional_brightness = 0.0
+
+[node name="LayerConfig" type="HBoxContainer" node_paths=PackedStringArray("file_dialog", "opacity_slider")]
+custom_minimum_size = Vector2(0, 50)
+script = ExtResource("1_tm0e2")
+file_dialog = NodePath("DirectoryButton/FileDialog")
+opacity_slider = NodePath("OpacityContainer/HSlider")
+
+[node name="OpacityContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="OpacityContainer"]
+layout_mode = 2
+text = "Opacity"
+horizontal_alignment = 1
+
+[node name="HSlider" type="HSlider" parent="OpacityContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[node name="OnionButton" type="TextureButton" parent="."]
+material = SubResource("ShaderMaterial_kv4xd")
+layout_mode = 2
+size_flags_horizontal = 3
+texture_normal = ExtResource("3_j3hi6")
+texture_pressed = ExtResource("4_h21x7")
+ignore_texture_size = true
+stretch_mode = 5
+script = ExtResource("5_3p68x")
+
+[node name="OnionOpacityContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="OnionOpacityContainer"]
+layout_mode = 2
+text = "Onion Skin Opacity"
+horizontal_alignment = 1
+
+[node name="HSlider" type="HSlider" parent="OnionOpacityContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+value = 50.0
+
+[node name="DirectoryButton" type="Button" parent="."]
+layout_mode = 2
+icon = ExtResource("6_a0pi7")
+script = ExtResource("7_fypca")
+
+[node name="FileDialog" type="FileDialog" parent="DirectoryButton"]
+title = "Open a Directory"
+size = Vector2i(452, 159)
+ok_button_text = "Select Current Folder"
+file_mode = 2
+access = 2
+use_native_dialog = true
+
+[connection signal="pressed" from="OnionButton" to="." method="_on_onion_button_toggled"]
+[connection signal="pressed" from="DirectoryButton" to="." method="_on_directory_button_pressed"]

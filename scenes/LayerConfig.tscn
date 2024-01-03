@@ -1,0 +1,114 @@
+[gd_scene load_steps=12 format=3 uid="uid://xuhx2e6vglvy"]
+
+[ext_resource type="Script" path="res://ui/layer_settings.gd" id="1_ttgk4"]
+[ext_resource type="Shader" path="res://ui/highlighter.gdshader" id="2_k3qlg"]
+[ext_resource type="Texture2D" uid="uid://c2klsiey7ripi" path="res://icons/eye-solid.svg" id="2_lrkfy"]
+[ext_resource type="Texture2D" uid="uid://bm62wvf0bnyqb" path="res://icons/onion_disabled.svg" id="3_1vofp"]
+[ext_resource type="Texture2D" uid="uid://dka5kiod5hfo8" path="res://icons/eye-slash-solid.svg" id="4_48ejy"]
+[ext_resource type="Texture2D" uid="uid://dg2naadl83m8m" path="res://icons/onion_active.svg" id="4_pndpk"]
+[ext_resource type="Script" path="res://ui/toggle_button.gd" id="5_hekvm"]
+[ext_resource type="Texture2D" uid="uid://3nb4c68eiu8d" path="res://icons/folder-solid.svg" id="6_1oku5"]
+[ext_resource type="Script" path="res://ui/directory_button.gd" id="7_erxrs"]
+[ext_resource type="Texture2D" uid="uid://mxb361uj1fh6" path="res://icons/trash-can-solid.svg" id="8_5ebja"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kv4xd"]
+shader = ExtResource("2_k3qlg")
+shader_parameter/additional_brightness = 0.0
+
+[node name="LayerConfig" type="HBoxContainer" node_paths=PackedStringArray("file_dialog", "visibility_button")]
+custom_minimum_size = Vector2(0, 50)
+script = ExtResource("1_ttgk4")
+file_dialog = NodePath("DirectoryButton/FileDialog")
+visibility_button = NodePath("VisibilityButton")
+
+[node name="VisibilityButton" type="Button" parent="."]
+layout_mode = 2
+icon = ExtResource("4_48ejy")
+script = ExtResource("5_hekvm")
+manual_toggle = true
+enabled_icon = ExtResource("2_lrkfy")
+
+[node name="OpacityContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="OpacityContainer"]
+layout_mode = 2
+text = "Opacity"
+horizontal_alignment = 1
+
+[node name="OpacitySlider" type="HSlider" parent="OpacityContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[node name="OnionButton" type="Button" parent="."]
+material = SubResource("ShaderMaterial_kv4xd")
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+icon = ExtResource("3_1vofp")
+flat = true
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("5_hekvm")
+enabled_icon = ExtResource("4_pndpk")
+
+[node name="OnionOpacityContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="OnionOpacityContainer"]
+layout_mode = 2
+text = "Onion Skin Opacity"
+horizontal_alignment = 1
+
+[node name="OnionOpacitySlider" type="HSlider" parent="OnionOpacityContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[node name="DirectoryButton" type="Button" parent="."]
+layout_mode = 2
+icon = ExtResource("6_1oku5")
+script = ExtResource("7_erxrs")
+
+[node name="FileDialog" type="FileDialog" parent="DirectoryButton"]
+title = "Open a Directory"
+size = Vector2i(452, 159)
+ok_button_text = "Select Current Folder"
+file_mode = 2
+access = 2
+use_native_dialog = true
+
+[node name="DeleteButton" type="Button" parent="."]
+layout_mode = 2
+icon = ExtResource("8_5ebja")
+
+[node name="AlphaPanel" type="PanelContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="HBoxContainer" parent="AlphaPanel"]
+layout_mode = 2
+
+[node name="CheckBox" type="CheckBox" parent="AlphaPanel/VBoxContainer"]
+layout_mode = 2
+text = "Alpha"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="AlphaPanel/VBoxContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 4
+
+[connection signal="pressed" from="VisibilityButton" to="." method="_on_visibility_button_pressed"]
+[connection signal="value_changed" from="OpacityContainer/OpacitySlider" to="." method="_on_opacity_slider_changed"]
+[connection signal="pressed" from="OnionButton" to="." method="_on_onion_button_toggled"]
+[connection signal="value_changed" from="OnionOpacityContainer/OnionOpacitySlider" to="." method="_on_onion_opacity_slider_changed"]
+[connection signal="pressed" from="DirectoryButton" to="." method="_on_directory_button_pressed"]
+[connection signal="pressed" from="DeleteButton" to="." method="_on_delete_button_pressed"]
+[connection signal="toggled" from="AlphaPanel/VBoxContainer/CheckBox" to="." method="_on_alpha_checkbox_toggled"]
+[connection signal="color_changed" from="AlphaPanel/VBoxContainer/ColorPickerButton" to="." method="_on_alpha_color_changed"]
