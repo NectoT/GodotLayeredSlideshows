@@ -25,7 +25,7 @@ border_color = Color(0.541176, 0.541176, 0.541176, 1)
 shader = ExtResource("2_k3qlg")
 shader_parameter/additional_brightness = 0.0
 
-[node name="LayerConfig" type="PanelContainer" node_paths=PackedStringArray("file_dialog", "visibility_button")]
+[node name="LayerConfig" type="PanelContainer" node_paths=PackedStringArray("file_dialog", "visibility_button", "opacity_slider", "onion_skin_button", "onion_skin_opacity_slider")]
 custom_minimum_size = Vector2(0, 50)
 offset_right = 423.0
 offset_bottom = 50.0
@@ -33,6 +33,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_fq4lj")
 script = ExtResource("1_ttgk4")
 file_dialog = NodePath("VBoxContainer/LowerSettings/DirectoryButton/FileDialog")
 visibility_button = NodePath("VBoxContainer/LowerSettings/VisibilityButton")
+opacity_slider = NodePath("VBoxContainer/LowerSettings/OpacityContainer/OpacitySlider")
+onion_skin_button = NodePath("VBoxContainer/LowerSettings/OnionButton")
+onion_skin_opacity_slider = NodePath("VBoxContainer/LowerSettings/OnionOpacityContainer/OnionOpacitySlider")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
