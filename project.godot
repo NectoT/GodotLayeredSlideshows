@@ -14,3 +14,7 @@ config/name="ZoomCartoons"
 run/main_scene="res://scenes/App.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
