@@ -85,6 +85,7 @@ func _get_sorted_filenames() -> Array[String]:
 
 
 func _load_frames():
+	_frames = []
 	for name in _get_sorted_filenames():
 		var image = Image.load_from_file(dir_path + '/' + name)
 		_frames.append(ImageTexture.create_from_image(image))
