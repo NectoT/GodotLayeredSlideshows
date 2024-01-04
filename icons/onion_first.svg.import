@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dg2naadl83m8m"
-path="res://.godot/imported/onion_active.svg-dfe57c1caa5f87d827dcab5561703c18.ctex"
+uid="uid://d2wb4e7r2vo2j"
+path="res://.godot/imported/onion_first.svg-3862ec9986596603e9c9504c014dfd18.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://icons/onion_active.svg"
-dest_files=["res://.godot/imported/onion_active.svg-dfe57c1caa5f87d827dcab5561703c18.ctex"]
+source_file="res://icons/onion_first.svg"
+dest_files=["res://.godot/imported/onion_first.svg-3862ec9986596603e9c9504c014dfd18.ctex"]
 
 [params]
 

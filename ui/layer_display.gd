@@ -5,6 +5,12 @@ enum Mode {
 	VIEW
 }
 
+enum OnionSkinMode {
+	OFF,
+	PREVIOUS,
+	FIRST  ## Показывается силуэт первого кадра
+}
+
 signal frame_amount_changed(frame_amount: int)
 
 @export var mainRect: TextureRect
@@ -22,10 +28,10 @@ var current_frame = 1:
 		if dir_path != "":
 			_set_frame()
 
-var onion_skin_enabled = false:
+var onion_skin_mode: OnionSkinMode = OnionSkinMode.OFF:
 	set(value):
-		if value != onion_skin_enabled:
-			onion_skin_enabled = value
+		if value != onion_skin_mode:
+			onion_skin_mode = value
 			_update_onion_skins()
 
 var opacity: float:
@@ -117,9 +123,13 @@ func _set_frame():
 
 
 func _update_onion_skins():
-	if not onion_skin_enabled or is_playing:
+	if onion_skin_mode == OnionSkinMode.OFF or is_playing:
 		for rect in onion_skin_holder.get_children():
 			rect.queue_free()
+		return
+	
+	if onion_skin_mode == OnionSkinMode.FIRST:
+		_update_first_frame_onion_skin()
 		return
 	
 	var sorted_filenames: Array[String] = _get_sorted_filenames()
@@ -148,6 +158,25 @@ func _update_onion_skins():
 	
 	for i in range(skin_amount, len(onion_rects)):
 		onion_rects[i].queue_free()
+
+
+func _update_first_frame_onion_skin():
+	if _dir_files_amount == 0:
+		return
+	
+	var onion_rects := onion_skin_holder.get_children()
+	for i in range(1, len(onion_rects)):
+		onion_rects[i].queue_free()
+	
+	var onion_rect: TextureRect
+	if len(onion_rects) == 0:
+		onion_rect = mainRect.duplicate() as TextureRect
+		onion_skin_holder.add_child(onion_rect)
+	else:
+		onion_rect = onion_rects[0] as TextureRect
+	
+	onion_rect.texture = _frames[0]
+	onion_rect.modulate.a = opacity - onion_skin_opacity_step
 
 
 func _a_modified_earlier_than_b(a_filename: String, b_filename: String) -> bool:

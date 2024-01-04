@@ -1,7 +1,7 @@
 class_name LayerConfig extends Control
 
 class ModeSettings:
-	var onion_skin_enabled = false
+	var onion_skin_mode = Layer.OnionSkinMode.OFF
 	var onion_skin_opacity = 0.5
 	var opacity = 0.5
 
@@ -12,7 +12,7 @@ signal layer_soloed
 @export var visibility_button: ToggleButton
 
 @export var opacity_slider: HSlider
-@export var onion_skin_button: ToggleButton
+@export var onion_skin_selector: OptionButton
 @export var onion_skin_opacity_slider: HSlider
 
 var layer: Layer:
@@ -56,9 +56,9 @@ func _on_directory_selected(dir: String):
 	layer.dir_path = dir
 
 
-func _on_onion_button_toggled():
-	current_settings.onion_skin_enabled = !current_settings.onion_skin_enabled
-	layer.onion_skin_enabled = !layer.onion_skin_enabled
+func _on_onion_option_selected(option_id: int):
+	current_settings.onion_skin_mode = option_id
+	layer.onion_skin_mode = option_id
 
 
 func _on_delete_button_pressed():
@@ -94,7 +94,7 @@ func _on_mode_button_pressed():
 
 func _apply_settings(layer: Layer, settings: ModeSettings):
 	layer.opacity = settings.opacity
-	layer.onion_skin_enabled = settings.onion_skin_enabled
+	layer.onion_skin_mode = settings.onion_skin_mode
 	layer.onion_skin_opacity_step = settings.onion_skin_opacity
 
 
@@ -102,7 +102,7 @@ func _apply_settings(layer: Layer, settings: ModeSettings):
 ## с режимом слоя
 func _sync_ui_with_settings(settings: ModeSettings):
 	opacity_slider.value = settings.opacity
-	onion_skin_button.enabled = settings.onion_skin_enabled
+	onion_skin_selector.select(settings.onion_skin_mode)
 	onion_skin_opacity_slider.value = settings.onion_skin_opacity
 
 
