@@ -17,8 +17,8 @@ var enabled = false:
 @export var enabled_icon: Texture2D
 @export_multiline var enabled_text: String = ""
 
-@onready var disabled_icon = icon
-@onready var disabled_text = text
+var disabled_icon = icon
+var disabled_text = text
 
 func _enter_tree() -> void:
 	var shader_material = ShaderMaterial.new()
