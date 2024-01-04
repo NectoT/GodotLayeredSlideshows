@@ -37,14 +37,15 @@ var total_frames = 0
 var playing_frames = false
 var playtime_passed_since_last_frame = 0
 
-var fullscreen: bool:
+var _previous_window_mode: Window.Mode
+var fullscreen: bool = false:
 	set(value):
-		if value:
+		fullscreen = value
+		if fullscreen:
+			_previous_window_mode = get_window().mode
 			get_window().mode = Window.MODE_FULLSCREEN
 		else:
-			get_window().mode = Window.MODE_WINDOWED
-	get:
-		return get_window().mode != Window.MODE_WINDOWED
+			get_window().mode = _previous_window_mode
 
 func _ready() -> void:
 	current_frame_label.text = str(current_frame)
