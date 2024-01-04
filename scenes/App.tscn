@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cm171rearli5x"]
+[gd_scene load_steps=11 format=3 uid="uid://cm171rearli5x"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_qk8ce"]
 [ext_resource type="PackedScene" uid="uid://cpo5iec4glmja" path="res://scenes/LayerDisplay.tscn" id="2_eba48"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://daq4l8c24vic8" path="res://icons/stop-solid.svg" id="4_o88ys"]
 [ext_resource type="Texture2D" uid="uid://8mjakyitmy1b" path="res://icons/play-solid.svg" id="5_jsmty"]
 [ext_resource type="LabelSettings" uid="uid://bg1npmc75mf45" path="res://themes/label_settings.tres" id="7_4paol"]
+[ext_resource type="Texture2D" uid="uid://b5m374ryayo1c" path="res://icons/maximize-solid.svg" id="9_uivg3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_002nx"]
 bg_color = Color(0.239216, 0.239216, 0.239216, 0.898039)
@@ -122,8 +123,15 @@ text = "Вау"
 label_settings = ExtResource("7_4paol")
 vertical_alignment = 1
 
+[node name="FullscreenButton" type="Button" parent="Interface"]
+layout_mode = 1
+offset_right = 8.0
+offset_bottom = 8.0
+icon = ExtResource("9_uivg3")
+
 [connection signal="pressed" from="Interface/Interface/Layers/NewLayerButton" to="." method="_create_layer"]
 [connection signal="pressed" from="Interface/VBoxContainer/PanelContainer/PlayerContainer/StopButton" to="." method="_stop_frames"]
 [connection signal="pressed" from="Interface/VBoxContainer/PanelContainer/PlayerContainer/PlayButton" to="." method="_play_frames"]
 [connection signal="pressed" from="Interface/VBoxContainer/Panel/FrameNumber/PrevFrameButton" to="." method="_previous_frame"]
 [connection signal="pressed" from="Interface/VBoxContainer/Panel/FrameNumber/NextFrameButton" to="." method="_next_frame"]
+[connection signal="pressed" from="Interface/FullscreenButton" to="." method="_on_fullscreen_button_pressed"]

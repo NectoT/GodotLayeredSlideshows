@@ -37,6 +37,15 @@ var total_frames = 0
 var playing_frames = false
 var playtime_passed_since_last_frame = 0
 
+var fullscreen: bool:
+	set(value):
+		if value:
+			get_window().mode = Window.MODE_FULLSCREEN
+		else:
+			get_window().mode = Window.MODE_WINDOWED
+	get:
+		return get_window().mode != Window.MODE_WINDOWED
+
 func _ready() -> void:
 	current_frame_label.text = str(current_frame)
 	total_frames_label.text = str(total_frames)
@@ -98,9 +107,16 @@ func _stop_frames():
 		layer.is_playing = false
 
 
+func _on_fullscreen_button_pressed():
+	fullscreen = !fullscreen
+
+
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed('toggle_ui'):
 		interface.visible = !interface.visible
+	
+	if Input.is_action_just_pressed('fullscreen_toggle'):
+		fullscreen = !fullscreen
 	
 	if playing_frames:
 		playtime_passed_since_last_frame += delta
