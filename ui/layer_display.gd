@@ -1,5 +1,10 @@
 class_name Layer extends Control
 
+enum Mode {
+	DRAW,
+	VIEW
+}
+
 signal frame_amount_changed(frame_amount: int)
 
 @export var mainRect: TextureRect
@@ -56,6 +61,11 @@ var alpha_enabled = false:
 		else:
 			_rect_material.set_shader_parameter('threshold', -0.1)
 
+var mode: Mode = Mode.VIEW:
+	set(value):
+		mode = value
+		_set_frame()
+
 var _alpha_threshold = 0.1
 
 var _dir_files_amount = 0
@@ -92,11 +102,16 @@ func _load_frames():
 
 
 func _set_frame():
-	if current_frame > _dir_files_amount:
-		mainRect.texture = null
+	if _dir_files_amount == 0:
 		return
 	
-	mainRect.texture = _frames[current_frame - 1]
+	if mode == Mode.VIEW:
+		mainRect.texture = _frames[(current_frame - 1) % len(_frames)]
+	elif mode == Mode.DRAW:
+		if current_frame > _dir_files_amount:
+			mainRect.texture = null
+		else:
+			mainRect.texture = _frames[current_frame - 1]
 	
 	_update_onion_skins()
 

@@ -1,4 +1,4 @@
-class_name LayerConfig extends HBoxContainer
+class_name LayerConfig extends Control
 
 signal layer_display_deleted
 signal layer_soloed
@@ -52,6 +52,13 @@ func _on_alpha_color_changed(color: Color):
 
 func _on_alpha_checkbox_toggled(toggled_on: bool):
 	layer.alpha_enabled = toggled_on
+
+
+func _on_mode_button_pressed():
+	if layer.mode == Layer.Mode.DRAW:
+		layer.mode = Layer.Mode.VIEW
+	else:
+		layer.mode = Layer.Mode.DRAW
 
 
 func _process(delta: float) -> void:
