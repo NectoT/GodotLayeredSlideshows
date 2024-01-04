@@ -7,6 +7,8 @@ signal frame_amount_changed(frame_amount: int)
 @export var layer_config: PackedScene
 
 @export var display: Control
+## Узел, в котором находятся все элементы, связанные с интерфейсом
+@export var interface: Control
 @export var layers_interface: Control
 
 @export var current_frame_label: Label
@@ -97,6 +99,9 @@ func _stop_frames():
 
 
 func _process(delta: float) -> void:
+	if Input.is_action_just_pressed('toggle_ui'):
+		interface.visible = !interface.visible
+	
 	if playing_frames:
 		playtime_passed_since_last_frame += delta
 		var frame_duration = 1.0 / framerate

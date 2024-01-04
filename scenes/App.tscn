@@ -12,7 +12,7 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_002nx"]
 bg_color = Color(0.239216, 0.239216, 0.239216, 0.898039)
 
-[node name="Control" type="Control" node_paths=PackedStringArray("display", "layers_interface", "current_frame_label", "total_frames_label")]
+[node name="Control" type="Control" node_paths=PackedStringArray("display", "interface", "layers_interface", "current_frame_label", "total_frames_label")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,6 +23,7 @@ script = ExtResource("1_qk8ce")
 layer = ExtResource("2_eba48")
 layer_config = ExtResource("3_5nyrh")
 display = NodePath("Display")
+interface = NodePath("Interface")
 layers_interface = NodePath("Interface/Interface/Layers")
 current_frame_label = NodePath("Interface/VBoxContainer/Panel/FrameNumber/CurrentFrame")
 total_frames_label = NodePath("Interface/VBoxContainer/Panel/FrameNumber/TotalFrames")
