@@ -28,6 +28,12 @@ var current_frame = 1:
 		if dir_path != "":
 			_set_frame()
 
+var frame_step = 1:
+	set(value):
+		frame_step = value
+		_set_frame()
+		frame_amount_changed.emit(total_frames())
+
 var onion_skin_mode: OnionSkinMode = OnionSkinMode.OFF:
 	set(value):
 		if value != onion_skin_mode:
@@ -76,7 +82,7 @@ var _alpha_threshold = 0.1
 
 var _dir_files_amount = 0
 
-var _frames: Array[ImageTexture] = []
+var _images: Array[ImageTexture] = []
 
 @onready var _rect_material = mainRect.material as ShaderMaterial
 
@@ -85,7 +91,7 @@ func _ready() -> void:
 
 
 func total_frames() -> int:
-	return _dir_files_amount
+	return floor(_dir_files_amount / frame_step)
 
 
 func _get_sorted_filenames() -> Array[String]:
@@ -101,10 +107,10 @@ func _get_sorted_filenames() -> Array[String]:
 
 
 func _load_frames():
-	_frames = []
+	_images = []
 	for name in _get_sorted_filenames():
 		var image = Image.load_from_file(dir_path + '/' + name)
-		_frames.append(ImageTexture.create_from_image(image))
+		_images.append(ImageTexture.create_from_image(image))
 
 
 func _set_frame():
@@ -112,12 +118,13 @@ func _set_frame():
 		return
 	
 	if mode == Mode.VIEW:
-		mainRect.texture = _frames[(current_frame - 1) % len(_frames)]
+		mainRect.texture = _images[get_file_index(current_frame)]
 	elif mode == Mode.DRAW:
-		if current_frame > _dir_files_amount:
+		var file_index = get_file_index(current_frame)
+		if file_index == -1:
 			mainRect.texture = null
 		else:
-			mainRect.texture = _frames[current_frame - 1]
+			mainRect.texture = _images[file_index]
 	
 	_update_onion_skins()
 
@@ -135,12 +142,13 @@ func _update_onion_skins():
 	var sorted_filenames: Array[String] = _get_sorted_filenames()
 	var onion_rects = onion_skin_holder.get_children()
 	var onion_skin_opacity = opacity - onion_skin_opacity_step
+	print(onion_skin_opacity)
 	var skin_amount: int = 0
 	while onion_skin_opacity > 0:
 		skin_amount += 1
 		
-		var frame_index = current_frame - 1 - skin_amount
-		if frame_index < 0:
+		var frame = current_frame - skin_amount
+		if frame < 0:
 			break
 		
 		var onion_skin: TextureRect
@@ -152,12 +160,30 @@ func _update_onion_skins():
 			onion_skin = onion_rects[skin_amount - 1]
 		
 		onion_skin.modulate.a = onion_skin_opacity
-		onion_skin.texture = _frames[frame_index]
+		var file_index = get_file_index(frame)
+		if file_index == -1:
+			onion_skin.texture = null
+		else:
+			onion_skin.texture = _images[file_index]
 		
 		onion_skin_opacity -= onion_skin_opacity_step
 	
 	for i in range(skin_amount, len(onion_rects)):
 		onion_rects[i].queue_free()
+
+
+## Возвращает индекс файла, соответствующий переданному кадру, или -1, если 
+## для кадра нет подходящего файла. Считается на основе шага и режима слоя
+func get_file_index(frame: int) -> int:
+	if mode == Mode.DRAW:
+		var index = (frame - 1) * frame_step
+		if index >= _dir_files_amount:
+			return -1
+		return index
+	elif _dir_files_amount == 0:
+		return 0
+	else:
+		return (frame - 1) * frame_step % _dir_files_amount
 
 
 func _update_first_frame_onion_skin():
@@ -175,7 +201,7 @@ func _update_first_frame_onion_skin():
 	else:
 		onion_rect = onion_rects[0] as TextureRect
 	
-	onion_rect.texture = _frames[0]
+	onion_rect.texture = _images[0]
 	onion_rect.modulate.a = opacity - onion_skin_opacity_step
 
 
@@ -199,4 +225,4 @@ func _process(delta: float) -> void:
 		
 		_set_frame()
 		
-		frame_amount_changed.emit(_dir_files_amount)
+		frame_amount_changed.emit(total_frames())

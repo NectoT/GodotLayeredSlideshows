@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://xuhx2e6vglvy"]
+[gd_scene load_steps=15 format=3 uid="uid://xuhx2e6vglvy"]
 
 [ext_resource type="Script" path="res://ui/layer_settings.gd" id="1_ttgk4"]
 [ext_resource type="Texture2D" uid="uid://bmn3desr6qvxu" path="res://icons/image-solid.svg" id="2_0n4xy"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://dka5kiod5hfo8" path="res://icons/eye-slash-solid.svg" id="4_48ejy"]
 [ext_resource type="Texture2D" uid="uid://dg2naadl83m8m" path="res://icons/onion_active.svg" id="4_pndpk"]
 [ext_resource type="Script" path="res://ui/toggle_button.gd" id="5_hekvm"]
+[ext_resource type="PackedScene" uid="uid://cp86txivesok6" path="res://scenes/NumberInput.tscn" id="5_vgt5k"]
 [ext_resource type="Texture2D" uid="uid://3nb4c68eiu8d" path="res://icons/folder-solid.svg" id="6_1oku5"]
 [ext_resource type="Script" path="res://ui/directory_button.gd" id="7_erxrs"]
 [ext_resource type="Texture2D" uid="uid://mxb361uj1fh6" path="res://icons/trash-can-solid.svg" id="8_5ebja"]
@@ -36,14 +37,24 @@ onion_skin_opacity_slider = NodePath("VBoxContainer/LowerSettings/OnionOpacityCo
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="ModeButton" type="Button" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 0
+theme_override_constants/separation = 10
+
+[node name="ModeButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
 text = "View  Mode"
 icon = ExtResource("2_0n4xy")
 script = ExtResource("5_hekvm")
 enabled_icon = ExtResource("2_d4o61")
 enabled_text = "Draw Mode"
+
+[node name="NumberInput" parent="VBoxContainer/HBoxContainer" instance=ExtResource("5_vgt5k")]
+layout_mode = 2
+label_text = "Frame Step:"
+number = 1
+min_number = 1
 
 [node name="LowerSettings" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -134,7 +145,8 @@ custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 4
 
-[connection signal="pressed" from="VBoxContainer/ModeButton" to="." method="_on_mode_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/ModeButton" to="." method="_on_mode_button_pressed"]
+[connection signal="number_changed" from="VBoxContainer/HBoxContainer/NumberInput" to="." method="_on_frame_step_input_changed"]
 [connection signal="pressed" from="VBoxContainer/LowerSettings/VisibilityButton" to="." method="_on_visibility_button_pressed"]
 [connection signal="value_changed" from="VBoxContainer/LowerSettings/OpacityContainer/OpacitySlider" to="." method="_on_opacity_slider_changed"]
 [connection signal="item_selected" from="VBoxContainer/LowerSettings/OnionSkinOption" to="." method="_on_onion_option_selected"]

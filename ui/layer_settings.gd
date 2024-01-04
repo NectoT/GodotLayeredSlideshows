@@ -92,6 +92,10 @@ func _on_mode_button_pressed():
 		current_settings = draw_settings
 
 
+func _on_frame_step_input_changed(number: int):
+	layer.frame_step = number
+
+
 func _apply_settings(layer: Layer, settings: ModeSettings):
 	layer.opacity = settings.opacity
 	layer.onion_skin_mode = settings.onion_skin_mode
