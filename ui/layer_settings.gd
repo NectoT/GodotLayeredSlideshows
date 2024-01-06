@@ -15,6 +15,8 @@ signal layer_soloed
 @export var onion_skin_selector: OptionButton
 @export var onion_skin_opacity_slider: HSlider
 
+@export var directory_name_label: Label
+
 var layer: Layer:
 	set(value):
 		layer = value
@@ -54,6 +56,7 @@ func _on_directory_button_pressed():
 
 func _on_directory_selected(dir: String):
 	layer.dir_path = dir
+	directory_name_label.text = dir.split('\\')[-1]
 
 
 func _on_onion_option_selected(option_id: int):
