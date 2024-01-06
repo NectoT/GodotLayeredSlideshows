@@ -111,21 +111,9 @@ func total_frames() -> int:
 	return floor(_dir_files_amount / abs(frame_step))
 
 
-func _get_sorted_filenames() -> Array[String]:
-	if dir_path == "":
-		return []
-	
-	# https://github.com/godotengine/godot/issues/72620 ...
-	var filenames: Array[String] = []
-	filenames.assign(Array(DirAccess.get_files_at(dir_path)))
-	
-	filenames.sort_custom(_a_modified_earlier_than_b)
-	return filenames as Array[String]
-
-
 func _load_frames():
 	_images = []
-	for name in _get_sorted_filenames():
+	for name in DirAccess.get_files_at(dir_path):
 		var image = Image.load_from_file(dir_path + '/' + name)
 		_images.append(ImageTexture.create_from_image(image))
 
@@ -156,7 +144,6 @@ func _update_onion_skins():
 		_update_frame_onion_skin()
 		return
 	
-	var sorted_filenames: Array[String] = _get_sorted_filenames()
 	var onion_rects = onion_skin_holder.get_children()
 	var onion_skin_opacity = opacity - _onion_skin_opacity_step
 	var frame = current_frame
@@ -205,9 +192,6 @@ func get_file_index(frame: int) -> int:
 			return -1
 		return _python_modulo(index, _dir_files_amount)
 	else:
-		print(_python_modulo(
-			start_file_index + zero_based_frame * frame_step, _dir_files_amount
-		))
 		return _python_modulo(
 			start_file_index + zero_based_frame * frame_step, _dir_files_amount
 		)
