@@ -28,6 +28,13 @@ var current_frame = 1:
 		if dir_path != "":
 			_set_frame()
 
+## Откуда идёт отсчёт кадров. Если значение отрицальное, то подразумевается
+## отступ от последнего кадра на это число
+var start_file_index = 0:
+	set(value):
+		start_file_index = value
+		_set_frame()
+
 var frame_step = 1:
 	set(value):
 		frame_step = value
@@ -171,19 +178,19 @@ func _update_onion_skins():
 	for i in range(skin_amount, len(onion_rects)):
 		onion_rects[i].queue_free()
 
-
 ## Возвращает индекс файла, соответствующий переданному кадру, или -1, если 
 ## для кадра нет подходящего файла. Считается на основе шага и режима слоя
 func get_file_index(frame: int) -> int:
 	if mode == Mode.DRAW:
-		var index = (frame - 1) * frame_step
+		var index = start_file_index + (frame - 1) * frame_step
 		if index >= _dir_files_amount:
 			return -1
-		return index
+		return index % _dir_files_amount
 	elif _dir_files_amount == 0:
 		return 0
 	else:
-		return (frame - 1) * frame_step % _dir_files_amount
+		print((start_file_index + (frame - 1) * frame_step) % _dir_files_amount)
+		return (start_file_index + (frame - 1) * frame_step) % _dir_files_amount
 
 
 func _update_first_frame_onion_skin():

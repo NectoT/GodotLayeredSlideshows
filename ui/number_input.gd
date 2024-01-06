@@ -1,6 +1,6 @@
 # TODO: tool-скрипт, визуальное изменение сцены в редакторе при изменении экспортных
 # переменных; убирание margin при отсутствии текста
-extends PanelContainer
+class_name NumberInput extends PanelContainer
 
 signal number_changed(number: int)
 

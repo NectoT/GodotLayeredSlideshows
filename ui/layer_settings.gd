@@ -17,6 +17,8 @@ signal layer_soloed
 
 @export var directory_name_label: Label
 
+@export var start_frame_input: NumberInput
+
 var layer: Layer:
 	set(value):
 		layer = value
@@ -98,6 +100,16 @@ func _on_mode_button_pressed():
 func _on_frame_step_input_changed(number: int):
 	layer.frame_step = number
 
+
+func _on_frame_start_input_changed(number: int):
+	if number == 0:  # Пропускаем ноль
+		if layer.start_file_index == 0:
+			start_frame_input.number = -1
+		else:
+			start_frame_input.number = 1
+		return
+	
+	layer.start_file_index = number - 1 if number > 0 else number
 
 func _apply_settings(layer: Layer, settings: ModeSettings):
 	layer.opacity = settings.opacity
