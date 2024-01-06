@@ -92,9 +92,6 @@ var mode: Mode = Mode.VIEW:
 var _alpha_threshold = 0.1
 
 var _filenames: Array[String] = []
-var _dir_files_amount:
-	get:
-		return len(_filenames)
 
 var _images: Array[ImageTexture] = []
 
@@ -107,18 +104,22 @@ func _ready() -> void:
 func total_frames() -> int:
 	if frame_step == 0:
 		return 1
-	return floor(_dir_files_amount / abs(frame_step))
+	return floor(len(_images) / abs(frame_step))
 
 
 func _load_frames():
 	_images = []
 	for name in DirAccess.get_files_at(dir_path):
-		var image = Image.load_from_file(dir_path + '/' + name)
-		_images.append(ImageTexture.create_from_image(image))
+		var image = Image.create(100, 100, false, Image.FORMAT_ASTC_4x4)
+		var status_code = image.load(dir_path + '/' + name)
+		if status_code == OK:
+			_images.append(ImageTexture.create_from_image(image))
+		else:
+			print('"{0}" could not be loaded as an image'.format([name]))
 
 
 func _set_frame():
-	if _dir_files_amount == 0:
+	if len(_images) == 0:
 		return
 	
 	if mode == Mode.VIEW:
@@ -182,22 +183,22 @@ func _python_modulo(n: int, base: int) -> int:
 func get_file_index(frame: int) -> int:
 	var zero_based_frame = frame - 1 if frame > 0 else -1
 	
-	if _dir_files_amount == 0:
+	if len(_images) == 0:
 		return -1
 	
 	if mode == Mode.DRAW:
 		var index = start_file_index + zero_based_frame * frame_step
-		if index >= _dir_files_amount:
+		if index >= len(_images):
 			return -1
-		return _python_modulo(index, _dir_files_amount)
+		return _python_modulo(index, len(_images))
 	else:
 		return _python_modulo(
-			start_file_index + zero_based_frame * frame_step, _dir_files_amount
+			start_file_index + zero_based_frame * frame_step, len(_images)
 		)
 
 
 func _update_frame_onion_skin():
-	if _dir_files_amount == 0:
+	if len(_images) == 0:
 		return
 	
 	var onion_rects := onion_skin_holder.get_children()
@@ -225,7 +226,6 @@ func _a_modified_earlier_than_b(a_filename: String, b_filename: String) -> bool:
 
 func _refresh_loaded_images() -> void:
 	if dir_path == "":
-		_dir_files_amount = 0
 		return
 	
 	var refreshed_filenames: Array[String] = []
