@@ -181,7 +181,7 @@ func _python_modulo(n: int, base: int) -> int:
 ## Возвращает индекс файла, соответствующий переданному кадру, или -1, если 
 ## для кадра нет подходящего файла. Считается на основе шага и режима слоя
 func get_file_index(frame: int) -> int:
-	var zero_based_frame = frame - 1 if frame > 0 else -1
+	var zero_based_frame = frame - 1 if frame > 0 else frame
 	
 	if len(_images) == 0:
 		return -1
@@ -192,6 +192,12 @@ func get_file_index(frame: int) -> int:
 			return -1
 		return _python_modulo(index, len(_images))
 	else:
+		#print('chose {0} for frame {1}'.format([
+			#_python_modulo(
+				#start_file_index + zero_based_frame * frame_step, len(_images)
+			#),
+			#frame
+		#]))
 		return _python_modulo(
 			start_file_index + zero_based_frame * frame_step, len(_images)
 		)
