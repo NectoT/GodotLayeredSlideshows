@@ -70,6 +70,7 @@ func _create_layer():
 	
 	display.add_child(layer_instance)
 	layers_interface.add_child(config_instance)
+	layers_interface.move_child(config_instance, 0)
 
 
 func _on_layer_soloed(layer_config: LayerConfig):
