@@ -25,7 +25,7 @@ layer = ExtResource("2_eba48")
 layer_config = ExtResource("3_5nyrh")
 display = NodePath("Display")
 interface = NodePath("Interface")
-layers_interface = NodePath("Interface/Interface/VBoxContainer/Layers")
+layers_interface = NodePath("Interface/Interface/ScrollContainer/VBoxContainer/Layers")
 current_frame_label = NodePath("Interface/VBoxContainer/Panel/FrameNumber/CurrentFrame")
 total_frames_label = NodePath("Interface/VBoxContainer/Panel/FrameNumber/TotalFrames")
 
@@ -57,15 +57,20 @@ grow_horizontal = 0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_002nx")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Interface/Interface"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Interface/Interface"]
 layout_mode = 2
+horizontal_scroll_mode = 0
 
-[node name="NewLayerButton" type="Button" parent="Interface/Interface/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Interface/Interface/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NewLayerButton" type="Button" parent="Interface/Interface/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 0
 text = "Create new layer"
 
-[node name="Layers" type="VBoxContainer" parent="Interface/Interface/VBoxContainer"]
+[node name="Layers" type="VBoxContainer" parent="Interface/Interface/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Interface"]
@@ -133,7 +138,7 @@ offset_right = 8.0
 offset_bottom = 8.0
 icon = ExtResource("9_uivg3")
 
-[connection signal="pressed" from="Interface/Interface/VBoxContainer/NewLayerButton" to="." method="_create_layer"]
+[connection signal="pressed" from="Interface/Interface/ScrollContainer/VBoxContainer/NewLayerButton" to="." method="_create_layer"]
 [connection signal="pressed" from="Interface/VBoxContainer/PanelContainer/PlayerContainer/StopButton" to="." method="_stop_frames"]
 [connection signal="pressed" from="Interface/VBoxContainer/PanelContainer/PlayerContainer/PlayButton" to="." method="_play_frames"]
 [connection signal="pressed" from="Interface/VBoxContainer/Panel/FrameNumber/PrevFrameButton" to="." method="_previous_frame"]
