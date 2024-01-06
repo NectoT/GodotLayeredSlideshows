@@ -7,8 +7,8 @@ enum Mode {
 
 enum OnionSkinMode {
 	OFF,
-	PREVIOUS,
-	FIRST  ## Показывается силуэт первого кадра
+	PREVIOUS,  ## Показываются силуэты предыдущих кадров
+	FRAME  ## Показывается силуэт выбранного кадра
 }
 
 signal frame_amount_changed(frame_amount: int)
@@ -41,11 +41,24 @@ var frame_step = 1:
 		_set_frame()
 		frame_amount_changed.emit(total_frames())
 
-var onion_skin_mode: OnionSkinMode = OnionSkinMode.OFF:
+var onion_skin_mode: OnionSkinMode = OnionSkinMode.PREVIOUS:
 	set(value):
 		if value != onion_skin_mode:
 			onion_skin_mode = value
 			_update_onion_skins()
+
+var _onion_skin_opacity_step = 0.2
+var _min_onion_skin_opacity = 0.1
+
+var onion_skin_frame: int = -1:
+	set(value):
+		onion_skin_frame = value
+		_update_onion_skins()
+
+var onion_skin_depth: int = 0:
+	set(value):
+		onion_skin_depth = value
+		_update_onion_skins()
 
 var opacity: float:
 	set(value):
@@ -53,11 +66,6 @@ var opacity: float:
 		_update_onion_skins()
 	get:
 		return mainRect.modulate.a
-
-var onion_skin_opacity_step = 0.5:
-	set(value):
-		onion_skin_opacity_step = value
-		_update_onion_skins()
 
 var is_playing = false:
 	set(value):
@@ -144,57 +152,68 @@ func _update_onion_skins():
 			rect.queue_free()
 		return
 	
-	if onion_skin_mode == OnionSkinMode.FIRST:
-		_update_first_frame_onion_skin()
+	if onion_skin_mode == OnionSkinMode.FRAME:
+		_update_frame_onion_skin()
 		return
 	
 	var sorted_filenames: Array[String] = _get_sorted_filenames()
 	var onion_rects = onion_skin_holder.get_children()
-	var onion_skin_opacity = opacity - onion_skin_opacity_step
-	print(onion_skin_opacity)
-	var skin_amount: int = 0
-	while onion_skin_opacity > 0:
-		skin_amount += 1
-		
-		var frame = current_frame - skin_amount
-		if frame < 0:
-			break
+	var onion_skin_opacity = opacity - _onion_skin_opacity_step
+	var frame = current_frame
+	for i in range(onion_skin_depth):
+		frame -= 1
+		if frame == 0:
+			frame -= 1
 		
 		var onion_skin: TextureRect
-		if len(onion_rects) < skin_amount:
+		if len(onion_rects) <= i:
 			onion_skin = mainRect.duplicate() as TextureRect
 			onion_skin_holder.add_child(onion_skin)
 			onion_skin_holder.move_child(onion_skin, 0)
 		else:
-			onion_skin = onion_rects[skin_amount - 1]
+			onion_skin = onion_rects[i]
 		
 		onion_skin.modulate.a = onion_skin_opacity
 		var file_index = get_file_index(frame)
 		if file_index == -1:
 			onion_skin.texture = null
+			return
 		else:
 			onion_skin.texture = _images[file_index]
 		
-		onion_skin_opacity -= onion_skin_opacity_step
+		onion_skin_opacity -= _onion_skin_opacity_step
+		onion_skin_opacity = max(_min_onion_skin_opacity, _onion_skin_opacity_step)
 	
-	for i in range(skin_amount, len(onion_rects)):
+	for i in range(onion_skin_depth, len(onion_rects)):
 		onion_rects[i].queue_free()
+
+# https://stackoverflow.com/a/60182730
+func _python_modulo(n: int, base: int) -> int:
+	return n - floor(n/float(base)) * base
 
 ## Возвращает индекс файла, соответствующий переданному кадру, или -1, если 
 ## для кадра нет подходящего файла. Считается на основе шага и режима слоя
 func get_file_index(frame: int) -> int:
+	var zero_based_frame = frame - 1 if frame > 0 else -1
+	
+	if _dir_files_amount == 0:
+		return -1
+	
 	if mode == Mode.DRAW:
-		var index = start_file_index + (frame - 1) * frame_step
+		var index = start_file_index + zero_based_frame * frame_step
 		if index >= _dir_files_amount:
 			return -1
-		return index % _dir_files_amount
-	elif _dir_files_amount == 0:
-		return 0
+		return _python_modulo(index, _dir_files_amount)
 	else:
-		return (start_file_index + (frame - 1) * frame_step) % _dir_files_amount
+		print(_python_modulo(
+			start_file_index + zero_based_frame * frame_step, _dir_files_amount
+		))
+		return _python_modulo(
+			start_file_index + zero_based_frame * frame_step, _dir_files_amount
+		)
 
 
-func _update_first_frame_onion_skin():
+func _update_frame_onion_skin():
 	if _dir_files_amount == 0:
 		return
 	
@@ -209,8 +228,9 @@ func _update_first_frame_onion_skin():
 	else:
 		onion_rect = onion_rects[0] as TextureRect
 	
-	onion_rect.texture = _images[0]
-	onion_rect.modulate.a = opacity - onion_skin_opacity_step
+	onion_rect.texture = _images[get_file_index(onion_skin_frame)]
+	onion_rect.modulate.a = opacity - _onion_skin_opacity_step
+	onion_rect.modulate.a = max(_min_onion_skin_opacity, onion_rect.modulate.a)
 
 
 func _a_modified_earlier_than_b(a_filename: String, b_filename: String) -> bool:

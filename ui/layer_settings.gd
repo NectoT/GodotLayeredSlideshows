@@ -1,8 +1,11 @@
 class_name LayerConfig extends Control
 
 class ModeSettings:
-	var onion_skin_mode = Layer.OnionSkinMode.OFF
-	var onion_skin_opacity = 0.5
+	var onion_skin_mode = Layer.OnionSkinMode.PREVIOUS
+	## Какой силуэт кадра показывать, если действует режим FRAME
+	var onion_skin_frame = -1
+	## Сколько силуэтов кадров показывать, если действует режим PREVIOUS
+	var onion_skin_depth = 0
 	var opacity = 0.5
 
 signal layer_display_deleted
@@ -13,7 +16,8 @@ signal layer_soloed
 
 @export var opacity_slider: HSlider
 @export var onion_skin_selector: OptionButton
-@export var onion_skin_opacity_slider: HSlider
+@export var onion_skin_frame_input: NumberInput
+@export var onion_skin_depth_input: NumberInput
 
 @export var directory_name_label: Label
 
@@ -52,6 +56,16 @@ func _on_onion_opacity_slider_changed(value: float):
 	layer.onion_skin_opacity_step = 1 - value
 
 
+func _on_onion_skin_frame_input_changed(number: int):
+	current_settings.onion_skin_frame = number
+	layer.onion_skin_frame = number
+
+
+func _on_onion_skin_depth_input_changed(number: int):
+	current_settings.onion_skin_depth = number
+	layer.onion_skin_depth = number
+
+
 func _on_directory_button_pressed():
 	file_dialog.visible = true
 
@@ -62,8 +76,10 @@ func _on_directory_selected(dir: String):
 
 
 func _on_onion_option_selected(option_id: int):
-	current_settings.onion_skin_mode = option_id
-	layer.onion_skin_mode = option_id
+	current_settings.onion_skin_mode = option_id + 1
+	layer.onion_skin_mode = option_id + 1
+	onion_skin_frame_input.visible = layer.onion_skin_mode == Layer.OnionSkinMode.FRAME
+	onion_skin_depth_input.visible = !onion_skin_frame_input.visible
 
 
 func _on_delete_button_pressed():
@@ -114,15 +130,20 @@ func _on_frame_start_input_changed(number: int):
 func _apply_settings(layer: Layer, settings: ModeSettings):
 	layer.opacity = settings.opacity
 	layer.onion_skin_mode = settings.onion_skin_mode
-	layer.onion_skin_opacity_step = settings.onion_skin_opacity
+	layer.onion_skin_frame = settings.onion_skin_frame
+	layer.onion_skin_depth = settings.onion_skin_depth
 
 
 ## Синхронизирует значения в UI-элементах, отвечающих за настройки, связанные
 ## с режимом слоя
 func _sync_ui_with_settings(settings: ModeSettings):
 	opacity_slider.value = settings.opacity
-	onion_skin_selector.select(settings.onion_skin_mode)
-	onion_skin_opacity_slider.value = settings.onion_skin_opacity
+	onion_skin_selector.select(settings.onion_skin_mode - 1)
+	onion_skin_frame_input.number = settings.onion_skin_frame
+	onion_skin_depth_input.number = settings.onion_skin_depth
+	
+	onion_skin_frame_input.visible = layer.onion_skin_mode == Layer.OnionSkinMode.FRAME
+	onion_skin_depth_input.visible = !onion_skin_frame_input.visible
 
 
 func _process(delta: float) -> void:
