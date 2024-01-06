@@ -23,6 +23,8 @@ signal layer_soloed
 
 @export var start_frame_input: NumberInput
 
+@export var modulation_picker: ColorPickerButton
+
 var layer: Layer:
 	set(value):
 		layer = value
@@ -39,6 +41,8 @@ var current_settings = view_settings:
 		if layer != null:
 			_apply_settings(layer, value)
 			_sync_ui_with_settings(value)
+
+var modulation_enabled = false
 
 func _ready() -> void:
 	file_dialog.dir_selected.connect(_on_directory_selected)
@@ -126,6 +130,26 @@ func _on_frame_start_input_changed(number: int):
 		return
 	
 	layer.start_file_index = number - 1 if number > 0 else number
+
+
+func _on_modulation_toggled(enabled: bool):
+	modulation_enabled = enabled
+	if enabled:
+		_set_layer_modulation(modulation_picker.color)
+	else:
+		_set_layer_modulation(Color.WHITE)
+
+
+func _on_modulation_color_picked(color: Color):
+	if modulation_enabled:
+		_set_layer_modulation(color)
+
+
+func _set_layer_modulation(color: Color):
+	layer.modulate.r = color.r
+	layer.modulate.g = color.g
+	layer.modulate.b = color.b
+
 
 func _apply_settings(layer: Layer, settings: ModeSettings):
 	layer.opacity = settings.opacity
