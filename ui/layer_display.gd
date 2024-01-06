@@ -16,11 +16,7 @@ signal frame_amount_changed(frame_amount: int)
 @export var mainRect: TextureRect
 @export var onion_skin_holder: Control
 
-var dir_path: String = "":
-	set(value):
-		dir_path = value
-		if dir_path != "":
-			_set_frame()
+var dir_path: String = ""
 
 var current_frame = 1:
 	set(value):
@@ -95,7 +91,10 @@ var mode: Mode = Mode.VIEW:
 
 var _alpha_threshold = 0.1
 
-var _dir_files_amount = 0
+var _filenames: Array[String] = []
+var _dir_files_amount:
+	get:
+		return len(_filenames)
 
 var _images: Array[ImageTexture] = []
 
@@ -224,17 +223,21 @@ func _a_modified_earlier_than_b(a_filename: String, b_filename: String) -> bool:
 	return a_file_modified > b_file_modified
 
 
-func _process(delta: float) -> void:
+func _refresh_loaded_images() -> void:
 	if dir_path == "":
 		_dir_files_amount = 0
 		return
 	
-	var new_files_amount = len(DirAccess.get_files_at(dir_path))
-	if _dir_files_amount != new_files_amount:
-		_load_frames()
+	var refreshed_filenames: Array[String] = []
+	refreshed_filenames.assign(Array(DirAccess.get_files_at(dir_path)))
+	if refreshed_filenames.hash() != _filenames.hash():
+		var new_total_amount = len(refreshed_filenames) != len(_filenames)
 		
-		_dir_files_amount = new_files_amount
+		_filenames = refreshed_filenames
+		
+		_load_frames()
 		
 		_set_frame()
 		
-		frame_amount_changed.emit(total_frames())
+		if new_total_amount:
+			frame_amount_changed.emit(total_frames())

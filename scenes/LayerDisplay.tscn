@@ -37,3 +37,9 @@ grow_horizontal = 2
 grow_vertical = 2
 expand_mode = 3
 stretch_mode = 5
+
+[node name="DirectoryTimer" type="Timer" parent="."]
+wait_time = 0.1
+autostart = true
+
+[connection signal="timeout" from="DirectoryTimer" to="." method="_refresh_loaded_images"]
