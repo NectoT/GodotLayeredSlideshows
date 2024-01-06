@@ -98,7 +98,9 @@ func _ready() -> void:
 
 
 func total_frames() -> int:
-	return floor(_dir_files_amount / frame_step)
+	if frame_step == 0:
+		return 1
+	return floor(_dir_files_amount / abs(frame_step))
 
 
 func _get_sorted_filenames() -> Array[String]:
@@ -189,7 +191,6 @@ func get_file_index(frame: int) -> int:
 	elif _dir_files_amount == 0:
 		return 0
 	else:
-		print((start_file_index + (frame - 1) * frame_step) % _dir_files_amount)
 		return (start_file_index + (frame - 1) * frame_step) % _dir_files_amount
 
 

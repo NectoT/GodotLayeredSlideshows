@@ -90,11 +90,11 @@ label_text = "Start frame:"
 number = 1
 min_number = -1000
 
-[node name="NumberInput" parent="VBoxContainer/HBoxContainer" instance=ExtResource("5_vgt5k")]
+[node name="FrameStep" parent="VBoxContainer/HBoxContainer" instance=ExtResource("5_vgt5k")]
 layout_mode = 2
 label_text = "Frame Step:"
 number = 1
-min_number = 1
+min_number = -1000
 
 [node name="LowerSettings" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -172,7 +172,7 @@ size_flags_vertical = 4
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/DeleteButton" to="." method="_on_delete_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/ModeButton" to="." method="_on_mode_button_pressed"]
 [connection signal="number_changed" from="VBoxContainer/HBoxContainer/StartFrame" to="." method="_on_frame_start_input_changed"]
-[connection signal="number_changed" from="VBoxContainer/HBoxContainer/NumberInput" to="." method="_on_frame_step_input_changed"]
+[connection signal="number_changed" from="VBoxContainer/HBoxContainer/FrameStep" to="." method="_on_frame_step_input_changed"]
 [connection signal="pressed" from="VBoxContainer/LowerSettings/VisibilityButton" to="." method="_on_visibility_button_pressed"]
 [connection signal="value_changed" from="VBoxContainer/LowerSettings/OpacityContainer/OpacitySlider" to="." method="_on_opacity_slider_changed"]
 [connection signal="item_selected" from="VBoxContainer/LowerSettings/OnionSkinOption" to="." method="_on_onion_option_selected"]
