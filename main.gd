@@ -73,12 +73,9 @@ func _create_layer():
 	layers_interface.move_child(config_instance, 0)
 
 
-func _on_layer_soloed(layer_config: LayerConfig):
-	for layer in display.get_children() as Array[Layer]:
-		if layer == layer_config.layer:
-			layer.visible = true
-		else:
-			layer.visible = false
+func _on_layer_soloed(soloed_config: LayerConfig):
+	# TODO: Сделать рабочее солирование слоя
+	pass
 
 
 func _update_total_frames():

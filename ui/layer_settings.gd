@@ -7,6 +7,7 @@ class ModeSettings:
 	## Сколько силуэтов кадров показывать, если действует режим PREVIOUS
 	var onion_skin_depth = 0
 	var opacity = 0.5
+	var is_visible = true
 
 signal layer_display_deleted
 signal layer_soloed
@@ -94,10 +95,12 @@ func _on_delete_button_pressed():
 
 
 func _on_visibility_button_pressed():
-	if Input.is_key_pressed(KEY_SHIFT):
+	# TODO: Сделать рабочее солирование слоя
+	if false and Input.is_key_pressed(KEY_SHIFT):
 		layer_soloed.emit()
 	else:
 		layer.visible = !layer.visible
+		current_settings.is_visible = !current_settings.is_visible
 
 
 func _on_alpha_color_changed(color: Color):
@@ -156,6 +159,7 @@ func _apply_settings(layer: Layer, settings: ModeSettings):
 	layer.onion_skin_mode = settings.onion_skin_mode
 	layer.onion_skin_frame = settings.onion_skin_frame
 	layer.onion_skin_depth = settings.onion_skin_depth
+	layer.visible = settings.is_visible
 
 
 ## Синхронизирует значения в UI-элементах, отвечающих за настройки, связанные
@@ -168,6 +172,8 @@ func _sync_ui_with_settings(settings: ModeSettings):
 	
 	onion_skin_frame_input.visible = layer.onion_skin_mode == Layer.OnionSkinMode.FRAME
 	onion_skin_depth_input.visible = !onion_skin_frame_input.visible
+	
+	visibility_button.enabled = settings.is_visible
 
 
 func _process(delta: float) -> void:
