@@ -145,7 +145,7 @@ func _update_onion_skins():
 		return
 	
 	var onion_rects = onion_skin_holder.get_children()
-	var onion_skin_opacity = opacity - _onion_skin_opacity_step
+	var onion_skin_opacity = max(0.1, opacity - _onion_skin_opacity_step)
 	var frame = current_frame
 	for i in range(onion_skin_depth):
 		frame -= 1
@@ -161,6 +161,7 @@ func _update_onion_skins():
 			onion_skin = onion_rects[i]
 		
 		onion_skin.modulate.a = onion_skin_opacity
+		
 		var file_index = get_file_index(frame)
 		if file_index == -1:
 			onion_skin.texture = null
@@ -169,7 +170,7 @@ func _update_onion_skins():
 			onion_skin.texture = _images[file_index]
 		
 		onion_skin_opacity -= _onion_skin_opacity_step
-		onion_skin_opacity = max(_min_onion_skin_opacity, _onion_skin_opacity_step)
+		onion_skin_opacity = max(_min_onion_skin_opacity, onion_skin_opacity)
 	
 	for i in range(onion_skin_depth, len(onion_rects)):
 		onion_rects[i].queue_free()
