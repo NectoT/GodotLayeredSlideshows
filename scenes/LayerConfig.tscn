@@ -28,12 +28,12 @@ offset_right = 423.0
 offset_bottom = 50.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_fq4lj")
 script = ExtResource("1_ttgk4")
-file_dialog = NodePath("VBoxContainer/LowerSettings/DirectoryButton/FileDialog")
+file_dialog = NodePath("VBoxContainer/HBoxContainer2/DirectoryButton/FileDialog")
 visibility_button = NodePath("VBoxContainer/LowerSettings/VisibilityButton")
 opacity_slider = NodePath("VBoxContainer/LowerSettings/OpacityContainer/OpacitySlider")
 onion_skin_selector = NodePath("VBoxContainer/LowerSettings/OnionSkinOption")
 onion_skin_opacity_slider = NodePath("VBoxContainer/LowerSettings/OnionOpacityContainer/OnionOpacitySlider")
-directory_name_label = NodePath("VBoxContainer/DirectoryName")
+directory_name_label = NodePath("VBoxContainer/HBoxContainer2/DirectoryName")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
@@ -41,10 +41,31 @@ layout_mode = 2
 [node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="DirectoryName" type="Label" parent="VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
+
+[node name="DirectoryName" type="Label" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "Empty"
 horizontal_alignment = 1
+
+[node name="DirectoryButton" type="Button" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+icon = ExtResource("6_1oku5")
+script = ExtResource("7_erxrs")
+
+[node name="FileDialog" type="FileDialog" parent="VBoxContainer/HBoxContainer2/DirectoryButton"]
+title = "Open a Directory"
+size = Vector2i(452, 159)
+ok_button_text = "Select Current Folder"
+file_mode = 2
+access = 2
+use_native_dialog = true
+
+[node name="DeleteButton" type="Button" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+icon = ExtResource("8_5ebja")
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
 layout_mode = 2
@@ -124,23 +145,6 @@ max_value = 1.0
 step = 0.01
 value = 0.5
 
-[node name="DirectoryButton" type="Button" parent="VBoxContainer/LowerSettings"]
-layout_mode = 2
-icon = ExtResource("6_1oku5")
-script = ExtResource("7_erxrs")
-
-[node name="FileDialog" type="FileDialog" parent="VBoxContainer/LowerSettings/DirectoryButton"]
-title = "Open a Directory"
-size = Vector2i(452, 159)
-ok_button_text = "Select Current Folder"
-file_mode = 2
-access = 2
-use_native_dialog = true
-
-[node name="DeleteButton" type="Button" parent="VBoxContainer/LowerSettings"]
-layout_mode = 2
-icon = ExtResource("8_5ebja")
-
 [node name="AlphaPanel" type="PanelContainer" parent="VBoxContainer/LowerSettings"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -157,13 +161,13 @@ custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 4
 
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/DirectoryButton" to="." method="_on_directory_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/DeleteButton" to="." method="_on_delete_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/ModeButton" to="." method="_on_mode_button_pressed"]
 [connection signal="number_changed" from="VBoxContainer/HBoxContainer/NumberInput" to="." method="_on_frame_step_input_changed"]
 [connection signal="pressed" from="VBoxContainer/LowerSettings/VisibilityButton" to="." method="_on_visibility_button_pressed"]
 [connection signal="value_changed" from="VBoxContainer/LowerSettings/OpacityContainer/OpacitySlider" to="." method="_on_opacity_slider_changed"]
 [connection signal="item_selected" from="VBoxContainer/LowerSettings/OnionSkinOption" to="." method="_on_onion_option_selected"]
 [connection signal="value_changed" from="VBoxContainer/LowerSettings/OnionOpacityContainer/OnionOpacitySlider" to="." method="_on_onion_opacity_slider_changed"]
-[connection signal="pressed" from="VBoxContainer/LowerSettings/DirectoryButton" to="." method="_on_directory_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/LowerSettings/DeleteButton" to="." method="_on_delete_button_pressed"]
 [connection signal="toggled" from="VBoxContainer/LowerSettings/AlphaPanel/VBoxContainer/CheckBox" to="." method="_on_alpha_checkbox_toggled"]
 [connection signal="color_changed" from="VBoxContainer/LowerSettings/AlphaPanel/VBoxContainer/ColorPickerButton" to="." method="_on_alpha_color_changed"]
