@@ -29,12 +29,12 @@ offset_bottom = 50.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_fq4lj")
 script = ExtResource("1_ttgk4")
 file_dialog = NodePath("VBoxContainer/HBoxContainer2/DirectoryButton/FileDialog")
-visibility_button = NodePath("VBoxContainer/LowerSettings/VisibilityButton")
-opacity_slider = NodePath("VBoxContainer/LowerSettings/OpacityContainer/OpacitySlider")
-onion_skin_selector = NodePath("VBoxContainer/LowerSettings/OnionSkinOption")
-onion_skin_opacity_slider = NodePath("VBoxContainer/LowerSettings/OnionOpacityContainer/OnionOpacitySlider")
+visibility_button = NodePath("VBoxContainer/HBoxContainer/VisibilityButton")
+opacity_slider = NodePath("VBoxContainer/HBoxContainer/OpacityContainer/OpacitySlider")
+onion_skin_selector = NodePath("VBoxContainer/HBoxContainer/OnionSkinOption")
+onion_skin_opacity_slider = NodePath("VBoxContainer/HBoxContainer/OnionOpacityContainer/OnionOpacitySlider")
 directory_name_label = NodePath("VBoxContainer/HBoxContainer2/DirectoryName")
-start_frame_input = NodePath("VBoxContainer/HBoxContainer/StartFrame")
+start_frame_input = NodePath("VBoxContainer/LowerSettings/StartFrame")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
@@ -75,6 +75,13 @@ layout_mode = 2
 layout_mode = 2
 theme_override_constants/separation = 10
 
+[node name="VisibilityButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("4_48ejy")
+script = ExtResource("5_hekvm")
+manual_toggle = true
+enabled_icon = ExtResource("2_lrkfy")
+
 [node name="ModeButton" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 2
@@ -84,45 +91,23 @@ script = ExtResource("5_hekvm")
 enabled_icon = ExtResource("2_d4o61")
 enabled_text = "Draw Mode"
 
-[node name="StartFrame" parent="VBoxContainer/HBoxContainer" instance=ExtResource("5_vgt5k")]
-layout_mode = 2
-label_text = "Start frame:"
-number = 1
-min_number = -1000
-
-[node name="FrameStep" parent="VBoxContainer/HBoxContainer" instance=ExtResource("5_vgt5k")]
-layout_mode = 2
-label_text = "Frame Step:"
-number = 1
-min_number = -1000
-
-[node name="LowerSettings" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-
-[node name="VisibilityButton" type="Button" parent="VBoxContainer/LowerSettings"]
-layout_mode = 2
-icon = ExtResource("4_48ejy")
-script = ExtResource("5_hekvm")
-manual_toggle = true
-enabled_icon = ExtResource("2_lrkfy")
-
-[node name="OpacityContainer" type="VBoxContainer" parent="VBoxContainer/LowerSettings"]
+[node name="OpacityContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="VBoxContainer/LowerSettings/OpacityContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/OpacityContainer"]
 layout_mode = 2
 text = "Opacity"
 horizontal_alignment = 1
 
-[node name="OpacitySlider" type="HSlider" parent="VBoxContainer/LowerSettings/OpacityContainer"]
+[node name="OpacitySlider" type="HSlider" parent="VBoxContainer/HBoxContainer/OpacityContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 1.0
 step = 0.01
 value = 0.5
 
-[node name="OnionSkinOption" type="OptionButton" parent="VBoxContainer/LowerSettings"]
+[node name="OnionSkinOption" type="OptionButton" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 expand_icon = true
 item_count = 3
@@ -137,20 +122,38 @@ popup/item_2/text = ""
 popup/item_2/icon = ExtResource("9_jcd0e")
 popup/item_2/id = 2
 
-[node name="OnionOpacityContainer" type="VBoxContainer" parent="VBoxContainer/LowerSettings"]
+[node name="OnionOpacityContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/LowerSettings/OnionOpacityContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/OnionOpacityContainer"]
 layout_mode = 2
 text = "Onion Skin Opacity"
 horizontal_alignment = 1
 
-[node name="OnionOpacitySlider" type="HSlider" parent="VBoxContainer/LowerSettings/OnionOpacityContainer"]
+[node name="OnionOpacitySlider" type="HSlider" parent="VBoxContainer/HBoxContainer/OnionOpacityContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 1.0
 step = 0.01
 value = 0.5
+
+[node name="HSeparator3" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="LowerSettings" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="StartFrame" parent="VBoxContainer/LowerSettings" instance=ExtResource("5_vgt5k")]
+layout_mode = 2
+label_text = "Start frame:"
+number = 1
+min_number = -1000
+
+[node name="FrameStep" parent="VBoxContainer/LowerSettings" instance=ExtResource("5_vgt5k")]
+layout_mode = 2
+label_text = "Frame Step:"
+number = 1
+min_number = -1000
 
 [node name="AlphaPanel" type="PanelContainer" parent="VBoxContainer/LowerSettings"]
 layout_mode = 2
@@ -170,12 +173,12 @@ size_flags_vertical = 4
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/DirectoryButton" to="." method="_on_directory_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/DeleteButton" to="." method="_on_delete_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/VisibilityButton" to="." method="_on_visibility_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/ModeButton" to="." method="_on_mode_button_pressed"]
-[connection signal="number_changed" from="VBoxContainer/HBoxContainer/StartFrame" to="." method="_on_frame_start_input_changed"]
-[connection signal="number_changed" from="VBoxContainer/HBoxContainer/FrameStep" to="." method="_on_frame_step_input_changed"]
-[connection signal="pressed" from="VBoxContainer/LowerSettings/VisibilityButton" to="." method="_on_visibility_button_pressed"]
-[connection signal="value_changed" from="VBoxContainer/LowerSettings/OpacityContainer/OpacitySlider" to="." method="_on_opacity_slider_changed"]
-[connection signal="item_selected" from="VBoxContainer/LowerSettings/OnionSkinOption" to="." method="_on_onion_option_selected"]
-[connection signal="value_changed" from="VBoxContainer/LowerSettings/OnionOpacityContainer/OnionOpacitySlider" to="." method="_on_onion_opacity_slider_changed"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer/OpacityContainer/OpacitySlider" to="." method="_on_opacity_slider_changed"]
+[connection signal="item_selected" from="VBoxContainer/HBoxContainer/OnionSkinOption" to="." method="_on_onion_option_selected"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer/OnionOpacityContainer/OnionOpacitySlider" to="." method="_on_onion_opacity_slider_changed"]
+[connection signal="number_changed" from="VBoxContainer/LowerSettings/StartFrame" to="." method="_on_frame_start_input_changed"]
+[connection signal="number_changed" from="VBoxContainer/LowerSettings/FrameStep" to="." method="_on_frame_step_input_changed"]
 [connection signal="toggled" from="VBoxContainer/LowerSettings/AlphaPanel/VBoxContainer/CheckBox" to="." method="_on_alpha_checkbox_toggled"]
 [connection signal="color_changed" from="VBoxContainer/LowerSettings/AlphaPanel/VBoxContainer/ColorPickerButton" to="." method="_on_alpha_color_changed"]
