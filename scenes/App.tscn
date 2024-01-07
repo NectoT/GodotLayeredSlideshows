@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cm171rearli5x"]
+[gd_scene load_steps=16 format=3 uid="uid://cm171rearli5x"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_qk8ce"]
 [ext_resource type="PackedScene" uid="uid://cpo5iec4glmja" path="res://scenes/LayerDisplay.tscn" id="2_eba48"]
@@ -15,7 +15,20 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_002nx"]
 bg_color = Color(0.239216, 0.239216, 0.239216, 0.898039)
 
-[node name="Control" type="Control" node_paths=PackedStringArray("display", "interface", "layers_interface", "current_frame_label", "total_frames_label")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bfg2l"]
+bg_color = Color(0, 0, 0, 0.239216)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vhpoi"]
+bg_color = Color(0.156863, 0.156863, 0.156863, 1)
+expand_margin_left = 10.0
+expand_margin_right = 10.0
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="LabelSettings" id="LabelSettings_nort3"]
+font_size = 24
+
+[node name="Control" type="Control" node_paths=PackedStringArray("display", "interface", "layers_interface", "loading_panel", "current_frame_label", "total_frames_label")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -28,6 +41,7 @@ layer_config = ExtResource("3_5nyrh")
 display = NodePath("Display")
 interface = NodePath("Interface")
 layers_interface = NodePath("Interface/Interface/ScrollContainer/VBoxContainer/Layers")
+loading_panel = NodePath("LoadingPanel")
 current_frame_label = NodePath("Interface/VBoxContainer/Panel/FrameNumber/CurrentFrame")
 total_frames_label = NodePath("Interface/VBoxContainer/Panel/FrameNumber/TotalFrames")
 
@@ -175,6 +189,28 @@ layout_mode = 1
 offset_right = 8.0
 offset_bottom = 8.0
 icon = ExtResource("9_uivg3")
+
+[node name="LoadingPanel" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bfg2l")
+
+[node name="CenterContainer" type="CenterContainer" parent="LoadingPanel"]
+layout_mode = 2
+
+[node name="LoadingPanel" type="PanelContainer" parent="LoadingPanel/CenterContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_vhpoi")
+
+[node name="Label" type="Label" parent="LoadingPanel/CenterContainer/LoadingPanel"]
+layout_mode = 2
+text = "Loading..."
+label_settings = SubResource("LabelSettings_nort3")
 
 [connection signal="pressed" from="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/LoadConfigButton" to="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/LoadConfigButton/FileDialog" method="set_visible" binds= [true]]
 [connection signal="file_selected" from="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/LoadConfigButton/FileDialog" to="." method="_load_layers_config"]

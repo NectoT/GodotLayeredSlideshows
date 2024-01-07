@@ -10,6 +10,7 @@ signal frame_amount_changed(frame_amount: int)
 ## Узел, в котором находятся все элементы, связанные с интерфейсом
 @export var interface: Control
 @export var layers_interface: Control
+@export var loading_panel: Control
 
 @export var current_frame_label: Label
 @export var total_frames_label: Label
@@ -47,9 +48,24 @@ var fullscreen: bool = false:
 		else:
 			get_window().mode = _previous_window_mode
 
+var _is_loading_config = false:
+	set(value):
+		_is_loading_config = value
+		_update_loading_panel()
+var _is_loading_images = false:
+	set(value):
+		_is_loading_images = value
+		_update_loading_panel()
+
 func _ready() -> void:
 	current_frame_label.text = str(current_frame)
 	total_frames_label.text = str(total_frames)
+
+
+## Скрывает или показывает плашку загрузки в зависимости от того, происходит
+## ли загрузка
+func _update_loading_panel():
+	loading_panel.visible = _is_loading_config or _is_loading_images
 
 
 func _save_layers_config(path: String):
@@ -66,6 +82,9 @@ func _save_layers_config(path: String):
 
 
 func _load_layers_config(path: String):
+	_is_loading_config = true
+	await get_tree().process_frame
+	
 	var config = ConfigFile.new()
 	config.load(path)
 	
@@ -81,6 +100,8 @@ func _load_layers_config(path: String):
 	for section in sections:
 		var layer_config_instance = _create_layer()
 		layer_config_instance.load_from_config_file(config, section)
+	
+	_is_loading_config = false
 
 
 func _previous_frame():
@@ -95,6 +116,9 @@ func _create_layer() -> LayerConfig:
 	layer_instance.current_frame = current_frame
 	
 	layer_instance.frame_amount_changed.connect(func(_total_frames: int): _update_total_frames())
+	layer_instance.images_started_loading.connect(_on_layer_images_loading)
+	layer_instance.images_loaded.connect(_on_layer_images_loaded)
+	
 	
 	var config_instance = layer_config.instantiate() as LayerConfig
 	config_instance.layer = layer_instance
@@ -111,6 +135,14 @@ func _create_layer() -> LayerConfig:
 func _on_layer_soloed(soloed_config: LayerConfig):
 	# TODO: Сделать рабочее солирование слоя
 	pass
+
+
+func _on_layer_images_loading():
+	_is_loading_images = true
+
+
+func _on_layer_images_loaded():
+	_is_loading_images = false
 
 
 func _update_total_frames():

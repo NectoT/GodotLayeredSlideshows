@@ -12,6 +12,8 @@ enum OnionSkinMode {
 }
 
 signal frame_amount_changed(frame_amount: int)
+signal images_started_loading
+signal images_loaded
 
 @export var mainRect: TextureRect
 @export var onion_skin_holder: Control
@@ -107,7 +109,9 @@ func total_frames() -> int:
 	return floor(len(_images) / abs(frame_step))
 
 
-func _load_frames():
+func _load_images():
+	images_started_loading.emit()
+	await get_tree().process_frame
 	_images = []
 	for name in DirAccess.get_files_at(dir_path):
 		var image = Image.create(100, 100, false, Image.FORMAT_ASTC_4x4)
@@ -116,6 +120,7 @@ func _load_frames():
 			_images.append(ImageTexture.create_from_image(image))
 		else:
 			print('"{0}" could not be loaded as an image'.format([name]))
+	images_loaded.emit()
 
 
 func _set_frame():
@@ -242,7 +247,7 @@ func _refresh_loaded_images() -> void:
 		
 		_filenames = refreshed_filenames
 		
-		_load_frames()
+		await _load_images()
 		
 		_set_frame()
 		
