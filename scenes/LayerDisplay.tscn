@@ -4,6 +4,7 @@
 [ext_resource type="Shader" path="res://ui/color_to_alpha.gdshader" id="2_epdq5"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tng8q"]
+resource_local_to_scene = true
 shader = ExtResource("2_epdq5")
 shader_parameter/alpha_color = Color(0, 0, 0, 1)
 shader_parameter/threshold = -0.1
