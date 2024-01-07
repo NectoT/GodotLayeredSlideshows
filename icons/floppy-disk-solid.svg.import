@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://3nb4c68eiu8d"
-path="res://.godot/imported/folder-solid.svg-47ca485c8abb6d9ce97ea51eaac7258d.ctex"
+uid="uid://b6hxhrrotxtl5"
+path="res://.godot/imported/floppy-disk-solid.svg-38359d36cc9f67a9e94c732c6048fa67.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://icons/folder-solid.svg"
-dest_files=["res://.godot/imported/folder-solid.svg-47ca485c8abb6d9ce97ea51eaac7258d.ctex"]
+source_file="res://icons/floppy-disk-solid.svg"
+dest_files=["res://.godot/imported/floppy-disk-solid.svg-38359d36cc9f67a9e94c732c6048fa67.ctex"]
 
 [params]
 

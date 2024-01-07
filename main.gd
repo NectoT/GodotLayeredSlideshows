@@ -51,13 +51,46 @@ func _ready() -> void:
 	current_frame_label.text = str(current_frame)
 	total_frames_label.text = str(total_frames)
 
+
+func _save_layers_config(path: String):
+	var config = ConfigFile.new()
+	
+	var layer_configs: Array[LayerConfig] = []
+	layer_configs.assign(layers_interface.get_children())
+	for i in range(len(layer_configs)):
+		layer_configs[i].save_to_config_file(config, 'Layer' + str(i))
+	
+	if not path.ends_with('.ini'):
+		path += '.ini'
+	config.save(path)
+
+
+func _load_layers_config(path: String):
+	var config = ConfigFile.new()
+	config.load(path)
+	
+	for node in display.get_children():
+		node.queue_free()
+	for node in layers_interface.get_children():
+		node.queue_free()
+	
+	var sections = config.get_sections()
+	#sections.sort()
+	sections.reverse()
+	
+	for section in sections:
+		var layer_config_instance = _create_layer()
+		layer_config_instance.load_from_config_file(config, section)
+
+
 func _previous_frame():
 	current_frame -= 1
 
 func _next_frame():
 	current_frame += 1
 
-func _create_layer():
+## Создаёт слой и настройки к нему. Возвращает настройки
+func _create_layer() -> LayerConfig:
 	var layer_instance = layer.instantiate() as Layer
 	layer_instance.current_frame = current_frame
 	
@@ -71,6 +104,8 @@ func _create_layer():
 	display.add_child(layer_instance)
 	layers_interface.add_child(config_instance)
 	layers_interface.move_child(config_instance, 0)
+	
+	return config_instance
 
 
 func _on_layer_soloed(soloed_config: LayerConfig):

@@ -16,7 +16,6 @@ signal number_changed(number: int)
 		if value < min_number:
 			return
 		number = value
-		number_changed.emit(number)
 		
 		if not is_node_ready():
 			await ready
@@ -27,9 +26,17 @@ signal number_changed(number: int)
 @onready var _number_label: Label = %NumberLabel
 
 
+## Устанавливает значение хранящегося числа и передаёт сигнал, если число поменялось
+func change_number(new_number: int):
+	var prev_number = number
+	number = new_number
+	if number != prev_number:
+		number_changed.emit(number)
+
+
 func _on_up_button_pressed():
-	number += 1
+	change_number(number + 1)
 
 
 func _on_down_button_pressed():
-	number -= 1
+	change_number(number - 1)

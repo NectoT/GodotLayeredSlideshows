@@ -1,11 +1,13 @@
-[gd_scene load_steps=11 format=3 uid="uid://cm171rearli5x"]
+[gd_scene load_steps=13 format=3 uid="uid://cm171rearli5x"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_qk8ce"]
 [ext_resource type="PackedScene" uid="uid://cpo5iec4glmja" path="res://scenes/LayerDisplay.tscn" id="2_eba48"]
 [ext_resource type="PackedScene" uid="uid://xuhx2e6vglvy" path="res://scenes/LayerConfig.tscn" id="3_5nyrh"]
+[ext_resource type="Texture2D" uid="uid://b6hxhrrotxtl5" path="res://icons/floppy-disk-solid.svg" id="4_4jn7r"]
 [ext_resource type="Texture2D" uid="uid://brpo7atj3nrwb" path="res://icons/chevron-left-solid.svg" id="4_dytnr"]
 [ext_resource type="Texture2D" uid="uid://dlww632quv8fd" path="res://icons/chevron-right-solid.svg" id="4_kc8da"]
 [ext_resource type="Texture2D" uid="uid://daq4l8c24vic8" path="res://icons/stop-solid.svg" id="4_o88ys"]
+[ext_resource type="Texture2D" uid="uid://3nb4c68eiu8d" path="res://icons/folder-solid.svg" id="4_sfkxq"]
 [ext_resource type="Texture2D" uid="uid://8mjakyitmy1b" path="res://icons/play-solid.svg" id="5_jsmty"]
 [ext_resource type="LabelSettings" uid="uid://bg1npmc75mf45" path="res://themes/label_settings.tres" id="7_4paol"]
 [ext_resource type="Texture2D" uid="uid://b5m374ryayo1c" path="res://icons/maximize-solid.svg" id="9_uivg3"]
@@ -64,6 +66,42 @@ horizontal_scroll_mode = 0
 [node name="VBoxContainer" type="VBoxContainer" parent="Interface/Interface/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="HSeparator" type="HSeparator" parent="Interface/Interface/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Interface/Interface/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="LoadConfigButton" type="Button" parent="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Load configuration"
+icon = ExtResource("4_sfkxq")
+
+[node name="FileDialog" type="FileDialog" parent="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/LoadConfigButton"]
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.ini")
+use_native_dialog = true
+
+[node name="SaveConfigButton" type="Button" parent="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Save configuration"
+icon = ExtResource("4_4jn7r")
+alignment = 0
+
+[node name="FileDialog" type="FileDialog" parent="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/SaveConfigButton"]
+ok_button_text = "Save"
+access = 2
+filters = PackedStringArray("*.ini")
+use_native_dialog = true
+
+[node name="HSeparator2" type="HSeparator" parent="Interface/Interface/ScrollContainer/VBoxContainer"]
+layout_mode = 2
 
 [node name="NewLayerButton" type="Button" parent="Interface/Interface/ScrollContainer/VBoxContainer"]
 layout_mode = 2
@@ -138,6 +176,10 @@ offset_right = 8.0
 offset_bottom = 8.0
 icon = ExtResource("9_uivg3")
 
+[connection signal="pressed" from="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/LoadConfigButton" to="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/LoadConfigButton/FileDialog" method="set_visible" binds= [true]]
+[connection signal="file_selected" from="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/LoadConfigButton/FileDialog" to="." method="_load_layers_config"]
+[connection signal="pressed" from="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/SaveConfigButton" to="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/SaveConfigButton/FileDialog" method="set_visible" binds= [true]]
+[connection signal="file_selected" from="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/SaveConfigButton/FileDialog" to="." method="_save_layers_config"]
 [connection signal="pressed" from="Interface/Interface/ScrollContainer/VBoxContainer/NewLayerButton" to="." method="_create_layer"]
 [connection signal="pressed" from="Interface/VBoxContainer/PanelContainer/PlayerContainer/StopButton" to="." method="_stop_frames"]
 [connection signal="pressed" from="Interface/VBoxContainer/PanelContainer/PlayerContainer/PlayButton" to="." method="_play_frames"]
