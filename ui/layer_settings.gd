@@ -199,15 +199,7 @@ func _on_frame_step_input_changed(number: int):
 
 
 func _on_frame_start_input_changed(number: int):
-	if number == 0:  # Пропускаем ноль
-		if layer.start_file_index == 0:
-			number = -1
-			start_frame_input.number = -1
-		else:
-			number = 1
-			start_frame_input.number = 1
-	
-	layer.start_file_index = number - 1 if number > 0 else number
+	layer.start_file_index = number - 1
 
 
 func _on_modulation_toggled(enabled: bool):

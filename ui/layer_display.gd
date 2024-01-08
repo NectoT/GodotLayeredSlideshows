@@ -154,8 +154,6 @@ func _update_onion_skins():
 	var frame = current_frame
 	for i in range(onion_skin_depth):
 		frame -= 1
-		if frame == 0:
-			frame -= 1
 		
 		var onion_skin: TextureRect
 		if len(onion_rects) <= i:
@@ -187,7 +185,7 @@ func _python_modulo(n: int, base: int) -> int:
 ## Возвращает индекс файла, соответствующий переданному кадру, или -1, если 
 ## для кадра нет подходящего файла. Считается на основе шага и режима слоя
 func get_file_index(frame: int) -> int:
-	var zero_based_frame = frame - 1 if frame > 0 else frame
+	var zero_based_frame = frame - 1
 	
 	if len(_images) == 0:
 		return -1

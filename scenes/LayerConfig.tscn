@@ -21,7 +21,7 @@ border_color = Color(0.541176, 0.541176, 0.541176, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u05gm"]
 bg_color = Color(0.180392, 0.180392, 0.180392, 0)
 
-[node name="LayerConfig" type="PanelContainer" node_paths=PackedStringArray("file_dialog", "visibility_button", "mode_button", "opacity_slider", "onion_skin_selector", "onion_skin_frame_input", "onion_skin_depth_input", "directory_name_label", "start_frame_input", "frame_step_input", "alpha_checkbox", "alpha_picker", "modulation_checkbox", "modulation_picker")]
+[node name="LayerConfig" type="PanelContainer" node_paths=PackedStringArray("file_dialog", "visibility_button", "opacity_slider", "onion_skin_selector", "onion_skin_frame_input", "onion_skin_depth_input", "directory_name_label", "start_frame_input", "frame_step_input", "alpha_checkbox", "alpha_picker", "modulation_checkbox", "modulation_picker")]
 custom_minimum_size = Vector2(0, 50)
 offset_right = 423.0
 offset_bottom = 50.0
@@ -29,7 +29,6 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_fq4lj")
 script = ExtResource("1_ttgk4")
 file_dialog = NodePath("VBoxContainer/HBoxContainer2/DirectoryButton/FileDialog")
 visibility_button = NodePath("VBoxContainer/HBoxContainer/VisibilityButton")
-mode_button = NodePath("")
 opacity_slider = NodePath("VBoxContainer/HBoxContainer/OpacityContainer/OpacitySlider")
 onion_skin_selector = NodePath("VBoxContainer/HBoxContainer/OnionSkinOption")
 onion_skin_frame_input = NodePath("VBoxContainer/HBoxContainer/OnionSkinFrame")
