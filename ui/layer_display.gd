@@ -191,22 +191,16 @@ func get_file_index(frame: int) -> int:
 	
 	if len(_images) == 0:
 		return -1
-	
-	if mode == Mode.DRAW:
-		var index = start_file_index + zero_based_frame * frame_step
-		if index >= len(_images):
-			return -1
-		return _python_modulo(index, len(_images))
-	else:
-		#print('chose {0} for frame {1}'.format([
-			#_python_modulo(
-				#start_file_index + zero_based_frame * frame_step, len(_images)
-			#),
-			#frame
-		#]))
-		return _python_modulo(
-			start_file_index + zero_based_frame * frame_step, len(_images)
-		)
+
+	#print('chose {0} for frame {1}'.format([
+		#_python_modulo(
+			#start_file_index + zero_based_frame * frame_step, len(_images)
+		#),
+		#frame
+	#]))
+	return _python_modulo(
+		start_file_index + zero_based_frame * frame_step, len(_images)
+	)
 
 
 func _update_frame_onion_skin():
