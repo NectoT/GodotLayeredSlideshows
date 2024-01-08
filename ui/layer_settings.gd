@@ -90,7 +90,7 @@ func save_to_config_file(config_file: ConfigFile, layer_section: String):
 
 
 func load_from_config_file(config_file: ConfigFile, layer_section: String):
-	_set_layer_mode(config_file.get_value(layer_section, 'mode', 0))
+	set_layer_mode(config_file.get_value(layer_section, 'mode', 0))
 	mode_button.enabled = layer.mode == Layer.Mode.DRAW
 	
 	draw_settings.load_from_config_file(config_file, layer_section, 'draw_mode')
@@ -186,14 +186,7 @@ func _on_alpha_checkbox_toggled(toggled_on: bool):
 	layer.alpha_enabled = toggled_on
 
 
-func _on_mode_button_pressed():
-	if layer.mode == Layer.Mode.DRAW:
-		_set_layer_mode(Layer.Mode.VIEW)
-	else:
-		_set_layer_mode(Layer.Mode.DRAW)
-
-
-func _set_layer_mode(mode: Layer.Mode):
+func set_layer_mode(mode: Layer.Mode):
 	if mode == Layer.Mode.DRAW:
 		layer.mode = Layer.Mode.DRAW
 		current_settings = draw_settings

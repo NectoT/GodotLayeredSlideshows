@@ -1,8 +1,6 @@
-[gd_scene load_steps=14 format=3 uid="uid://xuhx2e6vglvy"]
+[gd_scene load_steps=12 format=3 uid="uid://xuhx2e6vglvy"]
 
 [ext_resource type="Script" path="res://ui/layer_settings.gd" id="1_ttgk4"]
-[ext_resource type="Texture2D" uid="uid://bmn3desr6qvxu" path="res://icons/image-solid.svg" id="2_0n4xy"]
-[ext_resource type="Texture2D" uid="uid://db3k2b3bhhb50" path="res://icons/pencil-solid.svg" id="2_d4o61"]
 [ext_resource type="Texture2D" uid="uid://c2klsiey7ripi" path="res://icons/eye-solid.svg" id="2_lrkfy"]
 [ext_resource type="Texture2D" uid="uid://dka5kiod5hfo8" path="res://icons/eye-slash-solid.svg" id="4_48ejy"]
 [ext_resource type="Texture2D" uid="uid://dg2naadl83m8m" path="res://icons/onion_active.svg" id="4_pndpk"]
@@ -31,7 +29,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_fq4lj")
 script = ExtResource("1_ttgk4")
 file_dialog = NodePath("VBoxContainer/HBoxContainer2/DirectoryButton/FileDialog")
 visibility_button = NodePath("VBoxContainer/HBoxContainer/VisibilityButton")
-mode_button = NodePath("VBoxContainer/HBoxContainer/ModeButton")
+mode_button = NodePath("")
 opacity_slider = NodePath("VBoxContainer/HBoxContainer/OpacityContainer/OpacitySlider")
 onion_skin_selector = NodePath("VBoxContainer/HBoxContainer/OnionSkinOption")
 onion_skin_frame_input = NodePath("VBoxContainer/HBoxContainer/OnionSkinFrame")
@@ -88,15 +86,6 @@ icon = ExtResource("4_48ejy")
 script = ExtResource("5_hekvm")
 manual_toggle = true
 enabled_icon = ExtResource("2_lrkfy")
-
-[node name="ModeButton" type="Button" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 2
-text = "View  Mode"
-icon = ExtResource("2_0n4xy")
-script = ExtResource("5_hekvm")
-enabled_icon = ExtResource("2_d4o61")
-enabled_text = "Draw Mode"
 
 [node name="OpacityContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -190,7 +179,6 @@ edit_alpha = false
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/DirectoryButton" to="." method="_on_directory_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/DeleteButton" to="." method="_on_delete_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/VisibilityButton" to="." method="_on_visibility_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/ModeButton" to="." method="_on_mode_button_pressed"]
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer/OpacityContainer/OpacitySlider" to="." method="_on_opacity_slider_changed"]
 [connection signal="item_selected" from="VBoxContainer/HBoxContainer/OnionSkinOption" to="." method="_on_onion_option_selected"]
 [connection signal="number_changed" from="VBoxContainer/HBoxContainer/OnionSkinDepth" to="." method="_on_onion_skin_depth_input_changed"]

@@ -1,14 +1,17 @@
-[gd_scene load_steps=16 format=3 uid="uid://cm171rearli5x"]
+[gd_scene load_steps=19 format=3 uid="uid://cm171rearli5x"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_qk8ce"]
 [ext_resource type="PackedScene" uid="uid://cpo5iec4glmja" path="res://scenes/LayerDisplay.tscn" id="2_eba48"]
 [ext_resource type="PackedScene" uid="uid://xuhx2e6vglvy" path="res://scenes/LayerConfig.tscn" id="3_5nyrh"]
 [ext_resource type="Texture2D" uid="uid://b6hxhrrotxtl5" path="res://icons/floppy-disk-solid.svg" id="4_4jn7r"]
+[ext_resource type="Texture2D" uid="uid://bmn3desr6qvxu" path="res://icons/image-solid.svg" id="4_b0vcs"]
 [ext_resource type="Texture2D" uid="uid://brpo7atj3nrwb" path="res://icons/chevron-left-solid.svg" id="4_dytnr"]
 [ext_resource type="Texture2D" uid="uid://dlww632quv8fd" path="res://icons/chevron-right-solid.svg" id="4_kc8da"]
 [ext_resource type="Texture2D" uid="uid://daq4l8c24vic8" path="res://icons/stop-solid.svg" id="4_o88ys"]
 [ext_resource type="Texture2D" uid="uid://3nb4c68eiu8d" path="res://icons/folder-solid.svg" id="4_sfkxq"]
 [ext_resource type="Texture2D" uid="uid://8mjakyitmy1b" path="res://icons/play-solid.svg" id="5_jsmty"]
+[ext_resource type="Script" path="res://ui/toggle_button.gd" id="5_ogorr"]
+[ext_resource type="Texture2D" uid="uid://db3k2b3bhhb50" path="res://icons/pencil-solid.svg" id="6_u4i3j"]
 [ext_resource type="LabelSettings" uid="uid://bg1npmc75mf45" path="res://themes/label_settings.tres" id="7_4paol"]
 [ext_resource type="Texture2D" uid="uid://b5m374ryayo1c" path="res://icons/maximize-solid.svg" id="9_uivg3"]
 
@@ -87,6 +90,15 @@ layout_mode = 2
 [node name="HBoxContainer" type="HBoxContainer" parent="Interface/Interface/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 alignment = 2
+
+[node name="ModeButton" type="Button" parent="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "View  Mode"
+icon = ExtResource("4_b0vcs")
+script = ExtResource("5_ogorr")
+enabled_icon = ExtResource("6_u4i3j")
+enabled_text = "Draw Mode"
 
 [node name="LoadConfigButton" type="Button" parent="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -212,6 +224,7 @@ layout_mode = 2
 text = "Loading..."
 label_settings = SubResource("LabelSettings_nort3")
 
+[connection signal="pressed" from="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/ModeButton" to="." method="_on_mode_button_pressed"]
 [connection signal="pressed" from="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/LoadConfigButton" to="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/LoadConfigButton/FileDialog" method="set_visible" binds= [true]]
 [connection signal="file_selected" from="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/LoadConfigButton/FileDialog" to="." method="_load_layers_config"]
 [connection signal="pressed" from="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/SaveConfigButton" to="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/SaveConfigButton/FileDialog" method="set_visible" binds= [true]]

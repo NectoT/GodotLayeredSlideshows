@@ -57,6 +57,8 @@ var _is_loading_images = false:
 		_is_loading_images = value
 		_update_loading_panel()
 
+var _mode: Layer.Mode = Layer.Mode.VIEW
+
 func _ready() -> void:
 	current_frame_label.text = str(current_frame)
 	total_frames_label.text = str(total_frames)
@@ -176,6 +178,15 @@ func _stop_frames():
 func _on_fullscreen_button_pressed():
 	fullscreen = !fullscreen
 
+
+func _on_mode_button_pressed():
+	if _mode == Layer.Mode.VIEW:
+		_mode = Layer.Mode.DRAW
+	else:
+		_mode = Layer.Mode.VIEW
+	
+	for layer_config_instance in layers_interface.get_children() as Array[LayerConfig]:
+		layer_config_instance.set_layer_mode(_mode)
 
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed('toggle_ui'):
