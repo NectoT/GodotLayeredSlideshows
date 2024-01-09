@@ -31,7 +31,7 @@ shadow_offset = Vector2(0, 2)
 [sub_resource type="LabelSettings" id="LabelSettings_nort3"]
 font_size = 24
 
-[node name="Control" type="Control" node_paths=PackedStringArray("display", "interface", "layers_interface", "loading_panel", "current_frame_label", "total_frames_label")]
+[node name="Control" type="Control" node_paths=PackedStringArray("display", "interface", "layers_interface", "loading_panel", "current_frame_label", "total_frames_label", "mode_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -47,6 +47,7 @@ layers_interface = NodePath("Interface/Interface/ScrollContainer/VBoxContainer/L
 loading_panel = NodePath("LoadingPanel")
 current_frame_label = NodePath("Interface/VBoxContainer/Panel/FrameNumber/CurrentFrame")
 total_frames_label = NodePath("Interface/VBoxContainer/Panel/FrameNumber/TotalFrames")
+mode_button = NodePath("Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/ModeButton")
 
 [node name="Display" type="Control" parent="."]
 layout_mode = 1
@@ -224,7 +225,7 @@ layout_mode = 2
 text = "Loading..."
 label_settings = SubResource("LabelSettings_nort3")
 
-[connection signal="pressed" from="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/ModeButton" to="." method="_on_mode_button_pressed"]
+[connection signal="pressed" from="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/ModeButton" to="." method="_toggle_mode"]
 [connection signal="pressed" from="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/LoadConfigButton" to="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/LoadConfigButton/FileDialog" method="set_visible" binds= [true]]
 [connection signal="file_selected" from="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/LoadConfigButton/FileDialog" to="." method="_load_layers_config"]
 [connection signal="pressed" from="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/SaveConfigButton" to="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/SaveConfigButton/FileDialog" method="set_visible" binds= [true]]

@@ -15,6 +15,8 @@ signal frame_amount_changed(frame_amount: int)
 @export var current_frame_label: Label
 @export var total_frames_label: Label
 
+@export var mode_button: ToggleButton
+
 var framerate = 12
 
 var stop_frame = 1
@@ -179,7 +181,7 @@ func _on_fullscreen_button_pressed():
 	fullscreen = !fullscreen
 
 
-func _on_mode_button_pressed():
+func _toggle_mode():
 	if _mode == Layer.Mode.VIEW:
 		_mode = Layer.Mode.DRAW
 	else:
@@ -194,6 +196,15 @@ func _process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed('fullscreen_toggle'):
 		fullscreen = !fullscreen
+	
+	if Input.is_action_just_pressed('toggle_mode'):
+		_toggle_mode()
+		mode_button.enabled = !mode_button.enabled
+	
+	if Input.is_action_just_pressed('next_frame'):
+		current_frame += 1
+	if Input.is_action_just_pressed('previous_frame'):
+		current_frame -= 1
 	
 	if playing_frames:
 		playtime_passed_since_last_frame += delta
