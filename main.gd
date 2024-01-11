@@ -29,6 +29,8 @@ var current_frame = 1:
 			return
 		
 		current_frame = value
+		if not playing_frames:
+			stop_frame = current_frame
 		
 		if current_frame_label != null:
 			current_frame_label.text = str(current_frame)
@@ -118,9 +120,13 @@ func _load_layers_config(path: String):
 
 
 func _previous_frame():
+	if playing_frames:
+		_stop_frames()
 	current_frame -= 1
 
 func _next_frame():
+	if playing_frames:
+		_stop_frames()
 	current_frame += 1
 
 ## Создаёт слой и настройки к нему. Возвращает настройки
@@ -131,7 +137,6 @@ func _create_layer() -> LayerConfig:
 	layer_instance.frame_amount_changed.connect(func(_total_frames: int): _update_total_frames())
 	layer_instance.images_started_loading.connect(_on_layer_images_loading)
 	layer_instance.images_loaded.connect(_on_layer_images_loaded)
-	
 	
 	var config_instance = layer_config.instantiate() as LayerConfig
 	config_instance.layer = layer_instance
@@ -170,7 +175,6 @@ func _play_frames():
 	if total_frames < 2:
 		return
 	
-	stop_frame = current_frame
 	playtime_passed_since_last_frame = 0
 	playing_frames = true
 	
@@ -221,9 +225,9 @@ func _process(delta: float) -> void:
 		mode_button.enabled = !mode_button.enabled
 	
 	if Input.is_action_just_pressed('next_frame'):
-		current_frame += 1
+		_next_frame()
 	if Input.is_action_just_pressed('previous_frame'):
-		current_frame -= 1
+		_previous_frame()
 	
 	if playing_frames:
 		playtime_passed_since_last_frame += delta
