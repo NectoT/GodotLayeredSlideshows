@@ -80,7 +80,6 @@ func save_to_config_file(config_file: ConfigFile, layer_section: String):
 	view_settings.save_to_config_file(config_file, layer_section, 'view_mode')
 	
 	config_file.set_value(layer_section, 'dir_path', layer.dir_path)
-	config_file.set_value(layer_section, 'mode', layer.mode)
 	config_file.set_value(layer_section, 'frame_step', layer.frame_step)
 	config_file.set_value(layer_section, 'start_file_index', layer.start_file_index)
 	config_file.set_value(layer_section, 'modulation_enabled', modulation_enabled)
@@ -91,7 +90,6 @@ func save_to_config_file(config_file: ConfigFile, layer_section: String):
 
 func load_from_config_file(config_file: ConfigFile, layer_section: String):
 	set_layer_mode(config_file.get_value(layer_section, 'mode', 0))
-	mode_button.enabled = layer.mode == Layer.Mode.DRAW
 	
 	draw_settings.load_from_config_file(config_file, layer_section, 'draw_mode')
 	view_settings.load_from_config_file(config_file, layer_section, 'view_mode')

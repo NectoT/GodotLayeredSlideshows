@@ -17,6 +17,8 @@ signal frame_amount_changed(frame_amount: int)
 
 @export var mode_button: ToggleButton
 
+const LAYER_SECTION_PREFIX: String = 'Layer'
+
 var framerate = 12
 
 var stop_frame = 1
@@ -75,10 +77,12 @@ func _update_loading_panel():
 func _save_layers_config(path: String):
 	var config = ConfigFile.new()
 	
+	config.set_value('General', 'mode', _mode)
+	
 	var layer_configs: Array[LayerConfig] = []
 	layer_configs.assign(layers_interface.get_children())
 	for i in range(len(layer_configs)):
-		layer_configs[i].save_to_config_file(config, 'Layer' + str(i))
+		layer_configs[i].save_to_config_file(config, LAYER_SECTION_PREFIX + str(i))
 	
 	if not path.ends_with('.ini'):
 		path += '.ini'
@@ -102,8 +106,13 @@ func _load_layers_config(path: String):
 	sections.reverse()
 	
 	for section in sections:
+		if not section.begins_with(LAYER_SECTION_PREFIX):
+			continue
+		
 		var layer_config_instance = _create_layer()
 		layer_config_instance.load_from_config_file(config, section)
+	
+	_load_mode_from_config(config)
 	
 	_is_loading_config = false
 
@@ -189,6 +198,16 @@ func _toggle_mode():
 	
 	for layer_config_instance in layers_interface.get_children() as Array[LayerConfig]:
 		layer_config_instance.set_layer_mode(_mode)
+
+
+func _load_mode_from_config(config: ConfigFile):
+	_mode = config.get_value('General', 'mode')
+	
+	for layer_config_instance in layers_interface.get_children() as Array[LayerConfig]:
+		layer_config_instance.set_layer_mode(_mode)
+	
+	mode_button.enabled = _mode == Layer.Mode.VIEW
+
 
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed('toggle_ui'):
