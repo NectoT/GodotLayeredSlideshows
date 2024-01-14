@@ -32,7 +32,6 @@ func change_number(new_number: int):
 	number = new_number
 	if number != prev_number:
 		number_changed.emit(number)
-		print(number)
 
 
 func _on_up_button_pressed():
