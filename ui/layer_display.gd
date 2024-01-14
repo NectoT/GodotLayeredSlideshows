@@ -1,8 +1,8 @@
 class_name Layer extends Control
 
 enum Mode {
-	DRAW,
-	VIEW
+	VIEW,
+	DRAW
 }
 
 enum OnionSkinMode {

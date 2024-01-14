@@ -210,7 +210,7 @@ func _load_mode_from_config(config: ConfigFile):
 	for layer_config_instance in layers_interface.get_children() as Array[LayerConfig]:
 		layer_config_instance.set_layer_mode(_mode)
 	
-	mode_button.enabled = _mode == Layer.Mode.VIEW
+	mode_button.enabled = _mode == Layer.Mode.DRAW
 
 
 func _process(delta: float) -> void:

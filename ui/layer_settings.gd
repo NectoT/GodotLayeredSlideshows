@@ -89,7 +89,6 @@ func save_to_config_file(config_file: ConfigFile, layer_section: String):
 
 
 func load_from_config_file(config_file: ConfigFile, layer_section: String):
-	set_layer_mode(config_file.get_value(layer_section, 'mode', 0))
 	
 	draw_settings.load_from_config_file(config_file, layer_section, 'draw_mode')
 	view_settings.load_from_config_file(config_file, layer_section, 'view_mode')
