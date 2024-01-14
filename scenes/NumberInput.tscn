@@ -2,18 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://hpmibc5dxtiu" path="res://icons/chevron-up-solid.svg" id="1_7l7p5"]
 [ext_resource type="Script" path="res://ui/number_input.gd" id="1_lrd8r"]
+[ext_resource type="Script" path="res://ui/number_edit.gd" id="2_qjplr"]
 [ext_resource type="Texture2D" uid="uid://cx7l7bwrvm8ss" path="res://icons/chevron-down-solid.svg" id="2_u8mrw"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0glq5"]
-content_margin_left = 5.0
-content_margin_right = 5.0
-bg_color = Color(0.12549, 0.12549, 0.12549, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.301961, 0.301961, 0.301961, 1)
-border_blend = true
 
 [node name="NumberInput" type="PanelContainer"]
 anchors_preset = 15
@@ -37,14 +27,13 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Sample:"
 
-[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_0glq5")
-
-[node name="NumberLabel" type="Label" parent="HBoxContainer/PanelContainer"]
+[node name="NumberEdit" type="LineEdit" parent="HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "12"
+theme_override_constants/minimum_character_width = 2
+expand_to_text_length = true
+select_all_on_focus = true
+script = ExtResource("2_qjplr")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
@@ -58,5 +47,6 @@ icon = ExtResource("1_7l7p5")
 layout_mode = 2
 icon = ExtResource("2_u8mrw")
 
+[connection signal="number_submitted" from="HBoxContainer/NumberEdit" to="." method="change_number"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/UpButton" to="." method="_on_up_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/DownButton" to="." method="_on_down_button_pressed"]

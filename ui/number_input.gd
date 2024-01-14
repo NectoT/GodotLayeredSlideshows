@@ -19,11 +19,11 @@ signal number_changed(number: int)
 		
 		if not is_node_ready():
 			await ready
-		_number_label.text = str(number)
+		_number_edit.number = number
 @export var min_number = 0
 
 @onready var _label: Label = %Label
-@onready var _number_label: Label = %NumberLabel
+@onready var _number_edit: NumberEdit = %NumberEdit
 
 
 ## Устанавливает значение хранящегося числа и передаёт сигнал, если число поменялось
@@ -32,6 +32,7 @@ func change_number(new_number: int):
 	number = new_number
 	if number != prev_number:
 		number_changed.emit(number)
+		print(number)
 
 
 func _on_up_button_pressed():
