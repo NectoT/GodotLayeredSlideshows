@@ -1,21 +1,17 @@
-[gd_scene load_steps=21 format=3 uid="uid://cm171rearli5x"]
+[gd_scene load_steps=17 format=3 uid="uid://cm171rearli5x"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_qk8ce"]
 [ext_resource type="PackedScene" uid="uid://cpo5iec4glmja" path="res://scenes/LayerDisplay.tscn" id="2_eba48"]
 [ext_resource type="PackedScene" uid="uid://xuhx2e6vglvy" path="res://scenes/LayerConfig.tscn" id="3_5nyrh"]
-[ext_resource type="Texture2D" uid="uid://b6hxhrrotxtl5" path="res://icons/floppy-disk-solid.svg" id="4_4jn7r"]
+[ext_resource type="PackedScene" uid="uid://bvwugetjfe4gi" path="res://scenes/MenuBar.tscn" id="4_5uslx"]
 [ext_resource type="Texture2D" uid="uid://bmn3desr6qvxu" path="res://icons/image-solid.svg" id="4_b0vcs"]
 [ext_resource type="Texture2D" uid="uid://brpo7atj3nrwb" path="res://icons/chevron-left-solid.svg" id="4_dytnr"]
 [ext_resource type="Texture2D" uid="uid://dlww632quv8fd" path="res://icons/chevron-right-solid.svg" id="4_kc8da"]
 [ext_resource type="Texture2D" uid="uid://daq4l8c24vic8" path="res://icons/stop-solid.svg" id="4_o88ys"]
-[ext_resource type="Texture2D" uid="uid://3nb4c68eiu8d" path="res://icons/folder-solid.svg" id="4_sfkxq"]
 [ext_resource type="Texture2D" uid="uid://8mjakyitmy1b" path="res://icons/play-solid.svg" id="5_jsmty"]
 [ext_resource type="Script" path="res://ui/toggle_button.gd" id="5_ogorr"]
 [ext_resource type="Texture2D" uid="uid://db3k2b3bhhb50" path="res://icons/pencil-solid.svg" id="6_u4i3j"]
 [ext_resource type="LabelSettings" uid="uid://bg1npmc75mf45" path="res://themes/label_settings.tres" id="7_4paol"]
-[ext_resource type="Texture2D" uid="uid://c08x0vv3w1t1d" path="res://icons/gear-solid.svg" id="9_dgr86"]
-[ext_resource type="PackedScene" uid="uid://d0qp2isr5b0bc" path="res://scenes/CommonSettings.tscn" id="9_jloj1"]
-[ext_resource type="Texture2D" uid="uid://b5m374ryayo1c" path="res://icons/maximize-solid.svg" id="9_uivg3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_002nx"]
 bg_color = Color(0.239216, 0.239216, 0.239216, 0.898039)
@@ -33,8 +29,7 @@ shadow_offset = Vector2(0, 2)
 [sub_resource type="LabelSettings" id="LabelSettings_nort3"]
 font_size = 24
 
-[node name="Control" type="Control" node_paths=PackedStringArray("display", "interface", "layers_interface", "loading_panel", "current_frame_label", "total_frames_label", "mode_button", "settings_window")]
-layout_mode = 3
+[node name="Control" type="VBoxContainer" node_paths=PackedStringArray("display", "interface", "layers_interface", "loading_panel", "current_frame_label", "total_frames_label", "mode_button", "menu_bar")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -43,16 +38,26 @@ grow_vertical = 2
 script = ExtResource("1_qk8ce")
 layer = ExtResource("2_eba48")
 layer_config = ExtResource("3_5nyrh")
-display = NodePath("Display")
-interface = NodePath("Interface")
-layers_interface = NodePath("Interface/Interface/ScrollContainer/VBoxContainer/Layers")
-loading_panel = NodePath("LoadingPanel")
-current_frame_label = NodePath("Interface/VBoxContainer/Panel/FrameNumber/CurrentFrame")
-total_frames_label = NodePath("Interface/VBoxContainer/Panel/FrameNumber/TotalFrames")
-mode_button = NodePath("Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/ModeButton")
-settings_window = NodePath("Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/SettingsButton/SettingsWindow")
+display = NodePath("MainViewport/Display")
+interface = NodePath("MainViewport/Interface")
+layers_interface = NodePath("MainViewport/Interface/Interface/ScrollContainer/VBoxContainer/Layers")
+loading_panel = NodePath("MainViewport/LoadingPanel")
+current_frame_label = NodePath("MainViewport/Interface/FrameContainer/Panel/FrameNumber/CurrentFrame")
+total_frames_label = NodePath("MainViewport/Interface/FrameContainer/Panel/FrameNumber/TotalFrames")
+mode_button = NodePath("MainViewport/Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/ModeButton")
+menu_bar = NodePath("PanelContainer/MenuBar")
 
-[node name="Display" type="Control" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 2
+
+[node name="MenuBar" parent="PanelContainer" instance=ExtResource("4_5uslx")]
+layout_mode = 2
+
+[node name="MainViewport" type="Control" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Display" type="Control" parent="MainViewport"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -60,15 +65,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Interface" type="Control" parent="."]
+[node name="Interface" type="Control" parent="MainViewport"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_vertical = 3
 
-[node name="Interface" type="PanelContainer" parent="Interface"]
+[node name="Interface" type="PanelContainer" parent="MainViewport/Interface"]
 custom_minimum_size = Vector2(600, 0)
 layout_mode = 1
 anchors_preset = -1
@@ -80,22 +86,22 @@ grow_horizontal = 0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_002nx")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Interface/Interface"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MainViewport/Interface/Interface"]
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Interface/Interface/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainViewport/Interface/Interface/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HSeparator" type="HSeparator" parent="Interface/Interface/ScrollContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="MainViewport/Interface/Interface/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Interface/Interface/ScrollContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MainViewport/Interface/Interface/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 alignment = 2
 
-[node name="ModeButton" type="Button" parent="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer"]
+[node name="ModeButton" type="Button" parent="MainViewport/Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 2
 text = "View  Mode"
@@ -104,53 +110,18 @@ script = ExtResource("5_ogorr")
 enabled_icon = ExtResource("6_u4i3j")
 enabled_text = "Draw Mode"
 
-[node name="LoadConfigButton" type="Button" parent="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-text = "Load configuration"
-icon = ExtResource("4_sfkxq")
-
-[node name="FileDialog" type="FileDialog" parent="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/LoadConfigButton"]
-title = "Open a File"
-ok_button_text = "Open"
-file_mode = 0
-access = 2
-filters = PackedStringArray("*.ini")
-use_native_dialog = true
-
-[node name="SaveConfigButton" type="Button" parent="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 8
-text = "Save configuration"
-icon = ExtResource("4_4jn7r")
-alignment = 0
-
-[node name="FileDialog" type="FileDialog" parent="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/SaveConfigButton"]
-ok_button_text = "Save"
-access = 2
-filters = PackedStringArray("*.ini")
-use_native_dialog = true
-
-[node name="SettingsButton" type="Button" parent="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-icon = ExtResource("9_dgr86")
-
-[node name="SettingsWindow" parent="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/SettingsButton" instance=ExtResource("9_jloj1")]
-title = "Common Settings"
-initial_position = 4
-visible = false
-
-[node name="HSeparator2" type="HSeparator" parent="Interface/Interface/ScrollContainer/VBoxContainer"]
+[node name="HSeparator2" type="HSeparator" parent="MainViewport/Interface/Interface/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="NewLayerButton" type="Button" parent="Interface/Interface/ScrollContainer/VBoxContainer"]
+[node name="NewLayerButton" type="Button" parent="MainViewport/Interface/Interface/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 0
 text = "Create new layer"
 
-[node name="Layers" type="VBoxContainer" parent="Interface/Interface/ScrollContainer/VBoxContainer"]
+[node name="Layers" type="VBoxContainer" parent="MainViewport/Interface/Interface/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Interface"]
+[node name="FrameContainer" type="VBoxContainer" parent="MainViewport/Interface"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -163,59 +134,53 @@ offset_right = 60.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="PanelContainer" type="PanelContainer" parent="Interface/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="MainViewport/Interface/FrameContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="PlayerContainer" type="HBoxContainer" parent="Interface/VBoxContainer/PanelContainer"]
+[node name="PlayerContainer" type="HBoxContainer" parent="MainViewport/Interface/FrameContainer/PanelContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="StopButton" type="Button" parent="Interface/VBoxContainer/PanelContainer/PlayerContainer"]
+[node name="StopButton" type="Button" parent="MainViewport/Interface/FrameContainer/PanelContainer/PlayerContainer"]
 layout_mode = 2
 icon = ExtResource("4_o88ys")
 
-[node name="PlayButton" type="Button" parent="Interface/VBoxContainer/PanelContainer/PlayerContainer"]
+[node name="PlayButton" type="Button" parent="MainViewport/Interface/FrameContainer/PanelContainer/PlayerContainer"]
 layout_mode = 2
 icon = ExtResource("5_jsmty")
 
-[node name="Panel" type="PanelContainer" parent="Interface/VBoxContainer"]
+[node name="Panel" type="PanelContainer" parent="MainViewport/Interface/FrameContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="FrameNumber" type="HBoxContainer" parent="Interface/VBoxContainer/Panel"]
+[node name="FrameNumber" type="HBoxContainer" parent="MainViewport/Interface/FrameContainer/Panel"]
 layout_mode = 2
 
-[node name="PrevFrameButton" type="Button" parent="Interface/VBoxContainer/Panel/FrameNumber"]
+[node name="PrevFrameButton" type="Button" parent="MainViewport/Interface/FrameContainer/Panel/FrameNumber"]
 layout_mode = 2
 icon = ExtResource("4_dytnr")
 
-[node name="CurrentFrame" type="Label" parent="Interface/VBoxContainer/Panel/FrameNumber"]
+[node name="CurrentFrame" type="Label" parent="MainViewport/Interface/FrameContainer/Panel/FrameNumber"]
 layout_mode = 2
 text = "Тест"
 label_settings = ExtResource("7_4paol")
 vertical_alignment = 1
 
-[node name="NextFrameButton" type="Button" parent="Interface/VBoxContainer/Panel/FrameNumber"]
+[node name="NextFrameButton" type="Button" parent="MainViewport/Interface/FrameContainer/Panel/FrameNumber"]
 layout_mode = 2
 icon = ExtResource("4_kc8da")
 
-[node name="VSeparator" type="VSeparator" parent="Interface/VBoxContainer/Panel/FrameNumber"]
+[node name="VSeparator" type="VSeparator" parent="MainViewport/Interface/FrameContainer/Panel/FrameNumber"]
 layout_mode = 2
 
-[node name="TotalFrames" type="Label" parent="Interface/VBoxContainer/Panel/FrameNumber"]
+[node name="TotalFrames" type="Label" parent="MainViewport/Interface/FrameContainer/Panel/FrameNumber"]
 layout_mode = 2
 text = "Вау"
 label_settings = ExtResource("7_4paol")
 vertical_alignment = 1
 
-[node name="FullscreenButton" type="Button" parent="Interface"]
-layout_mode = 1
-offset_right = 8.0
-offset_bottom = 8.0
-icon = ExtResource("9_uivg3")
-
-[node name="LoadingPanel" type="PanelContainer" parent="."]
+[node name="LoadingPanel" type="PanelContainer" parent="MainViewport"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -225,28 +190,25 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_bfg2l")
 
-[node name="CenterContainer" type="CenterContainer" parent="LoadingPanel"]
+[node name="CenterContainer" type="CenterContainer" parent="MainViewport/LoadingPanel"]
 layout_mode = 2
 
-[node name="LoadingPanel" type="PanelContainer" parent="LoadingPanel/CenterContainer"]
+[node name="LoadingPanel" type="PanelContainer" parent="MainViewport/LoadingPanel/CenterContainer"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_vhpoi")
 
-[node name="Label" type="Label" parent="LoadingPanel/CenterContainer/LoadingPanel"]
+[node name="Label" type="Label" parent="MainViewport/LoadingPanel/CenterContainer/LoadingPanel"]
 layout_mode = 2
 text = "Loading..."
 label_settings = SubResource("LabelSettings_nort3")
 
-[connection signal="pressed" from="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/ModeButton" to="." method="_toggle_mode"]
-[connection signal="pressed" from="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/LoadConfigButton" to="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/LoadConfigButton/FileDialog" method="set_visible" binds= [true]]
-[connection signal="file_selected" from="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/LoadConfigButton/FileDialog" to="." method="_load_layers_config"]
-[connection signal="pressed" from="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/SaveConfigButton" to="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/SaveConfigButton/FileDialog" method="set_visible" binds= [true]]
-[connection signal="file_selected" from="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/SaveConfigButton/FileDialog" to="." method="_save_layers_config"]
-[connection signal="pressed" from="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/SettingsButton" to="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/SettingsButton/SettingsWindow" method="show"]
-[connection signal="playback_speed_changed" from="Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/SettingsButton/SettingsWindow" to="." method="_on_frame_speed_changed"]
-[connection signal="pressed" from="Interface/Interface/ScrollContainer/VBoxContainer/NewLayerButton" to="." method="_create_layer"]
-[connection signal="pressed" from="Interface/VBoxContainer/PanelContainer/PlayerContainer/StopButton" to="." method="_stop_frames"]
-[connection signal="pressed" from="Interface/VBoxContainer/PanelContainer/PlayerContainer/PlayButton" to="." method="_play_frames"]
-[connection signal="pressed" from="Interface/VBoxContainer/Panel/FrameNumber/PrevFrameButton" to="." method="_previous_frame"]
-[connection signal="pressed" from="Interface/VBoxContainer/Panel/FrameNumber/NextFrameButton" to="." method="_next_frame"]
-[connection signal="pressed" from="Interface/FullscreenButton" to="." method="_on_fullscreen_button_pressed"]
+[connection signal="frame_duration_changed" from="PanelContainer/MenuBar" to="." method="_on_frame_duration_changed"]
+[connection signal="fullscreen_toggled" from="PanelContainer/MenuBar" to="." method="_on_fullscreen_toggled"]
+[connection signal="load_config_requested" from="PanelContainer/MenuBar" to="." method="_load_layers_config"]
+[connection signal="save_config_as_requested" from="PanelContainer/MenuBar" to="." method="_save_layers_config"]
+[connection signal="pressed" from="MainViewport/Interface/Interface/ScrollContainer/VBoxContainer/HBoxContainer/ModeButton" to="." method="_toggle_mode"]
+[connection signal="pressed" from="MainViewport/Interface/Interface/ScrollContainer/VBoxContainer/NewLayerButton" to="." method="_create_layer"]
+[connection signal="pressed" from="MainViewport/Interface/FrameContainer/PanelContainer/PlayerContainer/StopButton" to="." method="_stop_frames"]
+[connection signal="pressed" from="MainViewport/Interface/FrameContainer/PanelContainer/PlayerContainer/PlayButton" to="." method="_play_frames"]
+[connection signal="pressed" from="MainViewport/Interface/FrameContainer/Panel/FrameNumber/PrevFrameButton" to="." method="_previous_frame"]
+[connection signal="pressed" from="MainViewport/Interface/FrameContainer/Panel/FrameNumber/NextFrameButton" to="." method="_next_frame"]

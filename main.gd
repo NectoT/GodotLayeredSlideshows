@@ -17,7 +17,7 @@ signal frame_amount_changed(frame_amount: int)
 
 @export var mode_button: ToggleButton
 
-@export var settings_window: SettingsWindow
+@export var menu_bar: AppMenuBar
 
 const LAYER_SECTION_PREFIX: String = 'Layer'
 
@@ -72,7 +72,7 @@ func _ready() -> void:
 	total_frames_label.text = str(total_frames)
 	
 	# Синхронизируем UI в настройках с реальной скоростью проигрывания
-	settings_window.playback_speed = frame_duration
+	menu_bar.settings_window.playback_speed = frame_duration
 
 
 ## Скрывает или показывает плашку загрузки в зависимости от того, происходит
@@ -105,7 +105,7 @@ func _load_layers_config(path: String):
 	config.load(path)
 	
 	frame_duration = config.get_value('General', 'frame_duration', 1.0 / 12)
-	settings_window.playback_speed = frame_duration
+	menu_bar.settings_window.playback_speed = frame_duration
 	
 	for node in display.get_children():
 		node.queue_free()
@@ -199,7 +199,7 @@ func _stop_frames():
 		layer.is_playing = false
 
 
-func _on_fullscreen_button_pressed():
+func _on_fullscreen_toggled():
 	fullscreen = !fullscreen
 
 
@@ -213,7 +213,7 @@ func _toggle_mode():
 		layer_config_instance.set_layer_mode(_mode)
 
 
-func _on_frame_speed_changed(new_framerate: float):
+func _on_frame_duration_changed(new_framerate: float):
 	frame_duration = new_framerate
 
 
@@ -229,9 +229,7 @@ func _load_mode_from_config(config: ConfigFile):
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed('toggle_ui'):
 		interface.visible = !interface.visible
-	
-	if Input.is_action_just_pressed('fullscreen_toggle'):
-		fullscreen = !fullscreen
+		menu_bar.visible = !menu_bar.visible
 	
 	if Input.is_action_just_pressed('toggle_mode'):
 		_toggle_mode()

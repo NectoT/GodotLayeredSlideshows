@@ -1,6 +1,6 @@
 class_name SettingsWindow extends Window
 
-signal playback_speed_changed(new_playback_speed)
+signal playback_speed_changed(new_playback_speed: float)
 
 var playback_speed: float:
 	set(value):

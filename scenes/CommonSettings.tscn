@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://ui/common_settings.gd" id="1_qaqa5"]
 [ext_resource type="PackedScene" uid="uid://cp86txivesok6" path="res://scenes/NumberInput.tscn" id="1_x1n22"]
 
-[node name="Window" type="Window"]
+[node name="SettingsWindow" type="Window"]
 initial_position = 2
 size = Vector2i(400, 200)
 script = ExtResource("1_qaqa5")

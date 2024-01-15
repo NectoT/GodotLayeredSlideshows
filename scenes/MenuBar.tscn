@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=3 uid="uid://bvwugetjfe4gi"]
+
+[ext_resource type="Script" path="res://ui/menu_bar.gd" id="1_fhhva"]
+[ext_resource type="PackedScene" uid="uid://d0qp2isr5b0bc" path="res://scenes/CommonSettings.tscn" id="2_pxu8i"]
+
+[node name="MenuBar" type="MenuBar"]
+flat = true
+script = ExtResource("1_fhhva")
+
+[node name="File" type="PopupMenu" parent="."]
+unique_name_in_owner = true
+
+[node name="SaveFileDialog" type="FileDialog" parent="File"]
+unique_name_in_owner = true
+size = Vector2i(312, 154)
+ok_button_text = "Save"
+access = 2
+filters = PackedStringArray("*.ini")
+use_native_dialog = true
+
+[node name="LoadFileDialog" type="FileDialog" parent="File"]
+unique_name_in_owner = true
+title = "Open a File"
+size = Vector2i(312, 154)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.ini")
+use_native_dialog = true
+
+[node name="SettingsWindow" parent="File" instance=ExtResource("2_pxu8i")]
+unique_name_in_owner = true
+visible = false
+
+[node name="View" type="PopupMenu" parent="."]
+unique_name_in_owner = true
+
+[connection signal="file_selected" from="File/SaveFileDialog" to="." method="_on_config_file_opened_for_saving"]
+[connection signal="file_selected" from="File/LoadFileDialog" to="." method="_on_config_file_opened_for_loading"]
+[connection signal="playback_speed_changed" from="File/SettingsWindow" to="." method="_on_settings_window_playback_speed_changed"]
